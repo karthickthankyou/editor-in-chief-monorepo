@@ -1,13 +1,26 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql'
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql'
 import { ReportersService } from './reporters.service'
 import { Reporter } from './entity/reporter.entity'
 import { FindManyReporterArgs, FindUniqueReporterArgs } from './dtos/find.args'
 import { CreateReporterInput } from './dtos/create-reporter.input'
 import { UpdateReporterInput } from './dtos/update-reporter.input'
+import { PrismaService } from 'src/common/prisma/prisma.service'
+import { User } from '../users/entity/user.entity'
+import { Article } from '../articles/entity/article.entity'
 
 @Resolver(() => Reporter)
 export class ReportersResolver {
-  constructor(private readonly reportersService: ReportersService) {}
+  constructor(
+    private readonly reportersService: ReportersService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Mutation(() => Reporter)
   createReporter(@Args('createReporterInput') args: CreateReporterInput) {
@@ -32,5 +45,19 @@ export class ReportersResolver {
   @Mutation(() => Reporter)
   removeReporter(@Args() args: FindUniqueReporterArgs) {
     return this.reportersService.remove(args)
+  }
+
+  @ResolveField(() => User)
+  user(@Parent() parent: Reporter) {
+    return this.prisma.user.findUnique({
+      where: { uid: parent.uid },
+    })
+  }
+
+  @ResolveField(() => [Article])
+  articles(@Parent() parent: User) {
+    return this.prisma.article.findMany({
+      where: { reporterUid: parent.uid },
+    })
   }
 }
