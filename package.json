@@ -12,7 +12,8 @@
     "build": "pnpm exec nx run-many --target=build",
     "validate": "pnpm format:write && concurrently  \"pnpm tsc\" \"pnpm lint\"",
     "nx:start": "nx daemon --start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cloc": "npx cloc --exclude-dir=node_modules,dist,build,pnpm-lock.yaml,package.json,package-lock.json,@generated,generated,.next,.nx ."
   },
   "keywords": [],
   "author": "Karthick Ragavendran",

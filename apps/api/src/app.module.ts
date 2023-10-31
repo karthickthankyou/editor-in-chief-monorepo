@@ -11,6 +11,8 @@ import { ArticlesModule } from './models/articles/articles.module'
 import { ReadsModule } from './models/reads/reads.module'
 import { FeedbacksModule } from './models/feedbacks/feedbacks.module'
 import { PrismaModule } from './common/prisma/prisma.module'
+import { AdminsModule } from './models/admins/admins.module'
+import { AuthModule } from './common/auth/auth.module'
 
 @Module({
   imports: [
@@ -25,8 +27,10 @@ import { PrismaModule } from './common/prisma/prisma.module'
     }),
     ConfigModule.forRoot(),
 
+    AuthModule,
     PrismaModule,
 
+    AdminsModule,
     UsersModule,
     ReportersModule,
     ArticlesModule,

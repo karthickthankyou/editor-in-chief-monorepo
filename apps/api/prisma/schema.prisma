@@ -20,6 +20,15 @@ model User {
     reads     Read[]
     feedbacks Feedback[]
     reporter  Reporter?
+    admin     Admin?
+}
+
+model Admin {
+    uid  String @id
+    user User   @relation(fields: [uid], references: [uid])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Reporter {

@@ -8,6 +8,9 @@ type User {
   createdAt: DateTime!
   updatedAt: DateTime!
   name: String!
+  reporter: Reporter
+  feedbacks: [Feedback!]!
+  reads: [Read!]!
 }
 
 """
@@ -19,6 +22,35 @@ type Reporter {
   uid: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User!
+  articles: [Article!]!
+}
+
+type Feedback {
+  type: FeedbackType!
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  uid: String!
+  articleId: Int!
+  user: User!
+  article: Article!
+}
+
+enum FeedbackType {
+  LIKE
+  DISLIKE
+}
+
+type Read {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  uid: String!
+  articleId: Int!
+  count: Int!
+  user: User!
+  article: Article!
 }
 
 type Article {
@@ -30,64 +62,88 @@ type Article {
   published: Boolean!
   tags: [String!]!
   reporterUid: String!
+  reporter: Reporter
+  feedbacks: [Feedback!]!
+  reads: [Read!]!
 }
 
-type Read {
-  id: Int!
+type Admin {
+  uid: String!
   createdAt: DateTime!
   updatedAt: DateTime!
-  uid: String!
-  articleId: Int!
-  count: Int!
-}
-
-type Feedback {
-  type: FeedbackType!
-  id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  uid: String!
-  articleId: Int!
-}
-
-enum FeedbackType {
-  LIKE
-  DISLIKE
 }
 
 type Query {
-  users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
+  admins(
+    distinct: [AdminScalarFieldEnum!]
+    where: AdminWhereInput
+    orderBy: [AdminOrderByWithRelationInput!]
+    cursor: AdminWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [Admin!]!
+  admin(where: AdminWhereUniqueInput): Admin!
+  users(
+    distinct: [UserScalarFieldEnum!]
+    where: UserWhereInput
+    orderBy: [UserOrderByWithRelationInput!]
+    cursor: UserWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [User!]!
   user(where: UserWhereUniqueInput): User!
-  reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
+  reporters(
+    distinct: [ReporterScalarFieldEnum!]
+    where: ReporterWhereInput
+    orderBy: [ReporterOrderByWithRelationInput!]
+    cursor: ReporterWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [Reporter!]!
   reporter(where: ReporterWhereUniqueInput): Reporter!
-  articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
+  articles(
+    distinct: [ArticleScalarFieldEnum!]
+    where: ArticleWhereInput
+    orderBy: [ArticleOrderByWithRelationInput!]
+    cursor: ArticleWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [Article!]!
   article(where: ArticleWhereUniqueInput): Article!
-  reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!
+  reads(
+    distinct: [ReadScalarFieldEnum!]
+    where: ReadWhereInput
+    orderBy: [ReadOrderByWithRelationInput!]
+    cursor: ReadWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [Read!]!
   read(where: ReadWhereUniqueInput): Read!
-  feedbacks(distinct: [FeedbackScalarFieldEnum!], where: FeedbackWhereInput, orderBy: [FeedbackOrderByWithRelationInput!], cursor: FeedbackWhereUniqueInput, take: Int, skip: Int): [Feedback!]!
+  feedbacks(
+    distinct: [FeedbackScalarFieldEnum!]
+    where: FeedbackWhereInput
+    orderBy: [FeedbackOrderByWithRelationInput!]
+    cursor: FeedbackWhereUniqueInput
+    take: Int
+    skip: Int
+  ): [Feedback!]!
   feedback(where: FeedbackWhereUniqueInput): Feedback!
 }
 
-enum UserScalarFieldEnum {
+enum AdminScalarFieldEnum {
   uid
   createdAt
   updatedAt
-  name
-  image
 }
 
-input UserWhereInput {
+input AdminWhereInput {
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter
-  name: StringFilter
-  image: StringFilter
-  reads: ReadListRelationFilter
-  feedbacks: FeedbackListRelationFilter
-  reporter: ReporterRelationFilter
-  AND: [UserWhereInput!]
-  OR: [UserWhereInput!]
-  NOT: [UserWhereInput!]
+  user: UserRelationFilter
+  AND: [AdminWhereInput!]
+  OR: [AdminWhereInput!]
+  NOT: [AdminWhereInput!]
 }
 
 input StringFilter {
@@ -120,6 +176,31 @@ input DateTimeFilter {
   gte: String
 }
 
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+input UserWhereInput {
+  admin: AdminRelationFilter
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  name: StringFilter
+  image: StringFilter
+  reads: ReadListRelationFilter
+  feedbacks: FeedbackListRelationFilter
+  reporter: ReporterRelationFilter
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+}
+
+input AdminRelationFilter {
+  is: AdminWhereInput
+  isNot: AdminWhereInput
+}
+
 input ReadListRelationFilter {
   every: ReadWhereInput
   some: ReadWhereInput
@@ -146,11 +227,6 @@ input IntFilter {
   lte: Int
   gt: Int
   gte: Int
-}
-
-input UserRelationFilter {
-  is: UserWhereInput
-  isNot: UserWhereInput
 }
 
 input ArticleRelationFilter {
@@ -237,20 +313,28 @@ input ArticleListRelationFilter {
   none: ArticleWhereInput
 }
 
+input AdminOrderByWithRelationInput {
+  uid: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
 input UserOrderByWithRelationInput {
   uid: SortOrder
   createdAt: SortOrder
   updatedAt: SortOrder
   name: SortOrder
   image: SortOrder
+  admin: AdminOrderByWithRelationInput
   reads: ReadOrderByRelationAggregateInput
   feedbacks: FeedbackOrderByRelationAggregateInput
   reporter: ReporterOrderByWithRelationInput
-}
-
-enum SortOrder {
-  asc
-  desc
 }
 
 input ReadOrderByRelationAggregateInput {
@@ -271,6 +355,18 @@ input ReporterOrderByWithRelationInput {
 
 input ArticleOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input AdminWhereUniqueInput {
+  uid: String!
+}
+
+enum UserScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+  name
+  image
 }
 
 input UserWhereUniqueInput {
@@ -365,6 +461,9 @@ input FeedbackWhereUniqueInput {
 }
 
 type Mutation {
+  createAdmin(createAdminInput: CreateAdminInput!): Admin!
+  updateAdmin(updateAdminInput: UpdateAdminInput!): Admin!
+  removeAdmin(where: AdminWhereUniqueInput): Admin!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(where: UserWhereUniqueInput): User!
@@ -380,6 +479,14 @@ type Mutation {
   createFeedback(createFeedbackInput: CreateFeedbackInput!): Feedback!
   updateFeedback(updateFeedbackInput: UpdateFeedbackInput!): Feedback!
   removeFeedback(where: FeedbackWhereUniqueInput): Feedback!
+}
+
+input CreateAdminInput {
+  uid: String!
+}
+
+input UpdateAdminInput {
+  uid: String!
 }
 
 input CreateUserInput {

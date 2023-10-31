@@ -5,6 +5,7 @@ import {
   RestrictProperties,
   StringFilter,
 } from 'src/common/dtos/common.input'
+import { AdminRelationFilter } from 'src/models/admins/dtos/where.args'
 import { FeedbackListRelationFilter } from 'src/models/feedbacks/dtos/where.args'
 import { ReadListRelationFilter } from 'src/models/reads/dtos/where.args'
 import { ReporterRelationFilter } from 'src/models/reporters/dtos/where.args'
@@ -18,6 +19,7 @@ export class UserWhereUniqueInput {
 export class UserWhereInputStrict
   implements RestrictProperties<UserWhereInputStrict, Prisma.UserWhereInput>
 {
+  admin: AdminRelationFilter
   uid: StringFilter
   createdAt: DateTimeFilter
   updatedAt: DateTimeFilter

@@ -1,6 +1,7 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql'
 import { Prisma } from '@prisma/client'
 import { RestrictProperties } from 'src/common/dtos/common.input'
+import { AdminOrderByWithRelationInput } from 'src/models/admins/dtos/order-by.args'
 import { FeedbackOrderByRelationAggregateInput } from 'src/models/feedbacks/dtos/order-by.args'
 import { ReadOrderByRelationAggregateInput } from 'src/models/reads/dtos/order-by.args'
 import { ReporterOrderByWithRelationInput } from 'src/models/reporters/dtos/order-by.args'
@@ -13,6 +14,7 @@ export class UserOrderByWithRelationInputStrict
       Prisma.UserOrderByWithRelationInput
     >
 {
+  admin: AdminOrderByWithRelationInput
   @Field(() => Prisma.SortOrder)
   uid: Prisma.SortOrder
   @Field(() => Prisma.SortOrder)
