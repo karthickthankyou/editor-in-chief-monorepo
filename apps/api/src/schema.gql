@@ -1,0 +1,444 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  image: String
+  uid: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Reporter {
+  uid: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Article {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  body: String!
+  published: Boolean!
+  tags: [String!]!
+  reporterUid: String!
+}
+
+type Read {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  uid: String!
+  articleId: Int!
+  count: Int!
+}
+
+type Feedback {
+  type: FeedbackType!
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  uid: String!
+  articleId: Int!
+}
+
+enum FeedbackType {
+  LIKE
+  DISLIKE
+}
+
+type Query {
+  users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
+  user(where: UserWhereUniqueInput): User!
+  reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
+  reporter(where: ReporterWhereUniqueInput): Reporter!
+  articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
+  article(where: ArticleWhereUniqueInput): Article!
+  reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!
+  read(where: ReadWhereUniqueInput): Read!
+  feedbacks(distinct: [FeedbackScalarFieldEnum!], where: FeedbackWhereInput, orderBy: [FeedbackOrderByWithRelationInput!], cursor: FeedbackWhereUniqueInput, take: Int, skip: Int): [Feedback!]!
+  feedback(where: FeedbackWhereUniqueInput): Feedback!
+}
+
+enum UserScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+  name
+  image
+}
+
+input UserWhereInput {
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  name: StringFilter
+  image: StringFilter
+  reads: ReadListRelationFilter
+  feedbacks: FeedbackListRelationFilter
+  reporter: ReporterRelationFilter
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+}
+
+input StringFilter {
+  mode: QueryMode
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: String
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+input DateTimeFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+}
+
+input ReadListRelationFilter {
+  every: ReadWhereInput
+  some: ReadWhereInput
+  none: ReadWhereInput
+}
+
+input ReadWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  uid: StringFilter
+  articleId: IntFilter
+  count: IntFilter
+  user: UserRelationFilter
+  article: ArticleRelationFilter
+  AND: [ReadWhereInput!]
+  OR: [ReadWhereInput!]
+  NOT: [ReadWhereInput!]
+}
+
+input IntFilter {
+  equals: Int
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+input ArticleRelationFilter {
+  is: ArticleWhereInput
+  isNot: ArticleWhereInput
+}
+
+input ArticleWhereInput {
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  title: StringFilter
+  body: StringFilter
+  published: BoolFilter
+  tags: StringListFilter
+  reporterUid: StringFilter
+  reads: ReadListRelationFilter
+  feedbacks: FeedbackListRelationFilter
+  reporter: ReporterRelationFilter
+  AND: [ArticleWhereInput!]
+  OR: [ArticleWhereInput!]
+  NOT: [ArticleWhereInput!]
+}
+
+input BoolFilter {
+  equals: Boolean
+  not: Boolean
+}
+
+input StringListFilter {
+  equals: [String!]
+  has: String
+  hasEvery: [String!]
+  hasSome: [String!]
+  isEmpty: Boolean
+}
+
+input FeedbackListRelationFilter {
+  every: FeedbackWhereInput
+  some: FeedbackWhereInput
+  none: FeedbackWhereInput
+}
+
+input FeedbackWhereInput {
+  type: EnumFeedbackTypeFilter
+  id: IntFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  uid: StringFilter
+  articleId: IntFilter
+  user: UserRelationFilter
+  article: ArticleRelationFilter
+  AND: [FeedbackWhereInput!]
+  OR: [FeedbackWhereInput!]
+  NOT: [FeedbackWhereInput!]
+}
+
+input EnumFeedbackTypeFilter {
+  equals: FeedbackType
+  in: [FeedbackType!]
+  notIn: [FeedbackType!]
+  not: FeedbackType
+}
+
+input ReporterRelationFilter {
+  is: ReporterWhereInput
+  isNot: ReporterWhereInput
+}
+
+input ReporterWhereInput {
+  uid: StringFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  user: UserRelationFilter
+  articles: ArticleListRelationFilter
+  AND: [ReporterWhereInput!]
+  OR: [ReporterWhereInput!]
+  NOT: [ReporterWhereInput!]
+}
+
+input ArticleListRelationFilter {
+  every: ArticleWhereInput
+  some: ArticleWhereInput
+  none: ArticleWhereInput
+}
+
+input UserOrderByWithRelationInput {
+  uid: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  name: SortOrder
+  image: SortOrder
+  reads: ReadOrderByRelationAggregateInput
+  feedbacks: FeedbackOrderByRelationAggregateInput
+  reporter: ReporterOrderByWithRelationInput
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input ReadOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input FeedbackOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ReporterOrderByWithRelationInput {
+  uid: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  articles: ArticleOrderByRelationAggregateInput
+}
+
+input ArticleOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input UserWhereUniqueInput {
+  uid: String!
+}
+
+enum ReporterScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+}
+
+input ReporterWhereUniqueInput {
+  uid: String!
+}
+
+enum ArticleScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  title
+  body
+  published
+  tags
+  reporterUid
+}
+
+input ArticleOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  title: SortOrder
+  body: SortOrder
+  published: SortOrder
+  tags: SortOrder
+  reporterUid: SortOrder
+  reads: ReadOrderByRelationAggregateInput
+  feedbacks: FeedbackOrderByRelationAggregateInput
+  reporter: ReporterOrderByWithRelationInput
+}
+
+input ArticleWhereUniqueInput {
+  id: Int
+}
+
+enum ReadScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  uid
+  articleId
+  count
+}
+
+input ReadOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  uid: SortOrder
+  articleId: SortOrder
+  count: SortOrder
+  user: UserOrderByWithRelationInput
+  article: ArticleOrderByWithRelationInput
+}
+
+input ReadWhereUniqueInput {
+  id: Int
+}
+
+enum FeedbackScalarFieldEnum {
+  id
+  createdAt
+  updatedAt
+  uid
+  articleId
+  type
+}
+
+input FeedbackOrderByWithRelationInput {
+  id: SortOrder
+  createdAt: SortOrder
+  updatedAt: SortOrder
+  uid: SortOrder
+  articleId: SortOrder
+  type: SortOrder
+  user: UserOrderByWithRelationInput
+  article: ArticleOrderByWithRelationInput
+}
+
+input FeedbackWhereUniqueInput {
+  id: Int
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  removeUser(where: UserWhereUniqueInput): User!
+  createReporter(createReporterInput: CreateReporterInput!): Reporter!
+  updateReporter(updateReporterInput: UpdateReporterInput!): Reporter!
+  removeReporter(where: ReporterWhereUniqueInput): Reporter!
+  createArticle(createArticleInput: CreateArticleInput!): Article!
+  updateArticle(updateArticleInput: UpdateArticleInput!): Article!
+  removeArticle(where: ArticleWhereUniqueInput): Article!
+  createRead(createReadInput: CreateReadInput!): Read!
+  updateRead(updateReadInput: UpdateReadInput!): Read!
+  removeRead(where: ReadWhereUniqueInput): Read!
+  createFeedback(createFeedbackInput: CreateFeedbackInput!): Feedback!
+  updateFeedback(updateFeedbackInput: UpdateFeedbackInput!): Feedback!
+  removeFeedback(where: FeedbackWhereUniqueInput): Feedback!
+}
+
+input CreateUserInput {
+  image: String
+  uid: String!
+  name: String!
+}
+
+input UpdateUserInput {
+  image: String
+  uid: String!
+  name: String
+}
+
+input CreateReporterInput {
+  uid: String!
+}
+
+input UpdateReporterInput {
+  uid: String!
+}
+
+input CreateArticleInput {
+  title: String!
+  body: String!
+  published: Boolean!
+  tags: [String!]!
+  reporterUid: String!
+}
+
+input UpdateArticleInput {
+  title: String
+  body: String
+  published: Boolean
+  tags: [String!]
+  reporterUid: String
+  id: Int!
+}
+
+input CreateReadInput {
+  uid: String!
+  articleId: Int!
+}
+
+input UpdateReadInput {
+  uid: String
+  articleId: Int
+  id: Int!
+}
+
+input CreateFeedbackInput {
+  type: FeedbackType!
+  uid: String!
+  articleId: Int!
+}
+
+input UpdateFeedbackInput {
+  type: FeedbackType
+  uid: String
+  articleId: Int
+  id: Int!
+}

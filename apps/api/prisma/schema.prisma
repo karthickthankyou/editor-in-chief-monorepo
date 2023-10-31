@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    uid       String   @id
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    name      String
+    image     String?
+    reads     Read[]
+    feedbacks Feedback[]
+    reporter  Reporter?
+}
+
+model Reporter {
+    uid  String @id
+    user User   @relation(fields: [uid], references: [uid])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    articles Article[]
+}
+
+model Article {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    title     String
+    body      String
+    published Boolean @default(false)
+
+    tags        String[]
+    reads       Read[]
+    feedbacks   Feedback[]
+    reporter    Reporter   @relation(fields: [reporterUid], references: [uid])
+    reporterUid String
+}
+
+model Read {
+    id        Int      @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    uid       String
+    articleId Int
+    user      User    @relation(fields: [uid], references: [uid])
+    article   Article @relation(fields: [articleId], references: [id])
+
+    count Int @default(1)
+
+    @@unique([uid, articleId])
+}
+
+model Feedback {
+    id        Int          @id @default(autoincrement())
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+    uid       String
+    articleId Int
+    user      User         @relation(fields: [uid], references: [uid])
+    article   Article      @relation(fields: [articleId], references: [id])
+    type      FeedbackType
+
+    @@unique([uid, articleId])
+}
+
+enum FeedbackType {
+    LIKE
+    DISLIKE
+}
