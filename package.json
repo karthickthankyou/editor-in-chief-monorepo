@@ -4,14 +4,21 @@
   "description": "",
   "private": true,
   "scripts": {
+    "format": "prettier  \"{apps,libs}/**/*.{ts,tsx,js,json}\" --ignore-path .gitignore",
+    "format:check": "pnpm format --check",
+    "format:write": "pnpm format --write",
     "tsc": "pnpm exec nx run-many --target=tsc",
     "lint": "pnpm exec nx run-many --target=lint",
-    "build": "pnpm exec nx run-many --target=build"
+    "build": "pnpm exec nx run-many --target=build",
+    "validate": "pnpm format:write && concurrently  \"pnpm tsc\" \"pnpm lint\"",
+    "nx:start": "nx daemon --start"
   },
   "keywords": [],
   "author": "Karthick Ragavendran",
   "license": "ISC",
   "devDependencies": {
-    "nx": "17.0.2"
+    "concurrently": "^8.2.2",
+    "nx": "17.0.2",
+    "prettier": "^2.3.2"
   }
 }
