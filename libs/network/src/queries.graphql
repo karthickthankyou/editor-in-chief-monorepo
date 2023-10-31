@@ -1,0 +1,10 @@
+query articles(
+  $skip: Int
+  $take: Int
+  $orderBy: [ArticleOrderByWithRelationInput!]
+  $where: ArticleWhereInput
+) {
+  articles(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+  }
+}

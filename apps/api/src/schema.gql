@@ -74,59 +74,17 @@ type Admin {
 }
 
 type Query {
-  admins(
-    distinct: [AdminScalarFieldEnum!]
-    where: AdminWhereInput
-    orderBy: [AdminOrderByWithRelationInput!]
-    cursor: AdminWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [Admin!]!
+  admins(distinct: [AdminScalarFieldEnum!], where: AdminWhereInput, orderBy: [AdminOrderByWithRelationInput!], cursor: AdminWhereUniqueInput, take: Int, skip: Int): [Admin!]!
   admin(where: AdminWhereUniqueInput): Admin!
-  users(
-    distinct: [UserScalarFieldEnum!]
-    where: UserWhereInput
-    orderBy: [UserOrderByWithRelationInput!]
-    cursor: UserWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [User!]!
+  users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput): User!
-  reporters(
-    distinct: [ReporterScalarFieldEnum!]
-    where: ReporterWhereInput
-    orderBy: [ReporterOrderByWithRelationInput!]
-    cursor: ReporterWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [Reporter!]!
+  reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
   reporter(where: ReporterWhereUniqueInput): Reporter!
-  articles(
-    distinct: [ArticleScalarFieldEnum!]
-    where: ArticleWhereInput
-    orderBy: [ArticleOrderByWithRelationInput!]
-    cursor: ArticleWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [Article!]!
+  articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   article(where: ArticleWhereUniqueInput): Article!
-  reads(
-    distinct: [ReadScalarFieldEnum!]
-    where: ReadWhereInput
-    orderBy: [ReadOrderByWithRelationInput!]
-    cursor: ReadWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [Read!]!
+  reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!
   read(where: ReadWhereUniqueInput): Read!
-  feedbacks(
-    distinct: [FeedbackScalarFieldEnum!]
-    where: FeedbackWhereInput
-    orderBy: [FeedbackOrderByWithRelationInput!]
-    cursor: FeedbackWhereUniqueInput
-    take: Int
-    skip: Int
-  ): [Feedback!]!
+  feedbacks(distinct: [FeedbackScalarFieldEnum!], where: FeedbackWhereInput, orderBy: [FeedbackOrderByWithRelationInput!], cursor: FeedbackWhereUniqueInput, take: Int, skip: Int): [Feedback!]!
   feedback(where: FeedbackWhereUniqueInput): Feedback!
 }
 
