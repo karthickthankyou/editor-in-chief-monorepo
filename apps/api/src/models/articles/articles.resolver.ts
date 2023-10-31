@@ -15,17 +15,26 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { Reporter } from '../reporters/entity/reporter.entity'
 import { Feedback } from '../feedbacks/entity/feedback.entity'
 import { Read } from '../reads/entity/read.entity'
+import { AIService } from 'src/common/ai/ai.service'
 
 @Resolver(() => Article)
 export class ArticlesResolver {
   constructor(
     private readonly articlesService: ArticlesService,
     private readonly prisma: PrismaService,
+    private readonly ai: AIService,
   ) {}
 
   @Mutation(() => Article)
-  createArticle(@Args('createArticleInput') args: CreateArticleInput) {
-    return this.articlesService.create(args)
+  async createArticle(@Args('createArticleInput') args: CreateArticleInput) {
+    const article = await this.articlesService.create(args)
+    const sdf = this.ai.addRecord(article)
+    return article
+  }
+
+  @Query(() => String, { name: 'questionArticles' })
+  question(@Args('query') query: string) {
+    return this.ai.question(query)
   }
 
   @Query(() => [Article], { name: 'articles' })

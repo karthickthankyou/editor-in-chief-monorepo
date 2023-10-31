@@ -80,6 +80,7 @@ type Query {
   user(where: UserWhereUniqueInput): User!
   reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
   reporter(where: ReporterWhereUniqueInput): Reporter!
+  questionArticles(query: String!): String!
   articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   article(where: ArticleWhereUniqueInput): Article!
   reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!

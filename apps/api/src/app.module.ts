@@ -13,6 +13,7 @@ import { FeedbacksModule } from './models/feedbacks/feedbacks.module'
 import { PrismaModule } from './common/prisma/prisma.module'
 import { AdminsModule } from './models/admins/admins.module'
 import { AuthModule } from './common/auth/auth.module'
+import { AIModule } from './common/ai/ai.module'
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthModule } from './common/auth/auth.module'
 
     AuthModule,
     PrismaModule,
+    AIModule,
 
     AdminsModule,
     UsersModule,

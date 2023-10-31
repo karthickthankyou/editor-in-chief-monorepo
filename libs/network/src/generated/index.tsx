@@ -375,6 +375,7 @@ export type Query = {
   articles: Array<Article>
   feedback: Feedback
   feedbacks: Array<Feedback>
+  questionArticles: Scalars['String']['output']
   read: Read
   reads: Array<Read>
   reporter: Reporter
@@ -420,6 +421,10 @@ export type QueryFeedbacksArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<FeedbackWhereInput>
+}
+
+export type QueryQuestionArticlesArgs = {
+  query: Scalars['String']['input']
 }
 
 export type QueryReadArgs = {
