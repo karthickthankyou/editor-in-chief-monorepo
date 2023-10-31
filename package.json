@@ -4,9 +4,14 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "pnpm exec nx run-many --target=tsc",
+    "lint": "pnpm exec nx run-many --target=lint",
+    "build": "pnpm exec nx run-many --target=build"
   },
   "keywords": [],
   "author": "Karthick Ragavendran",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nx": "17.0.2"
+  }
 }
