@@ -11,14 +11,17 @@
     "lint": "pnpm exec nx run-many --target=lint",
     "build": "pnpm exec nx run-many --target=build",
     "validate": "pnpm format:write && concurrently  \"pnpm tsc\" \"pnpm lint\"",
-    "nx:start": "nx daemon --start"
+    "nx:start": "nx daemon --start",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Karthick Ragavendran",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "lint-staged": "^15.0.2",
     "nx": "17.0.2",
-    "prettier": "^2.3.2"
+    "prettier": "^2.3.2",
+    "husky": "^8.0.0"
   }
 }
