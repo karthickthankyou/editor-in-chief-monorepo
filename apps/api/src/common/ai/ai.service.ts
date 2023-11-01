@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { Index, Pinecone, RecordMetadata } from '@pinecone-database/pinecone'
 
-import { Article } from 'src/models/articles/entity/article.entity'
+import { Article } from 'src/models/articles/graphql/entity/article.entity'
 import OpenAI from 'openai'
 import { ChatCompletionMessageParam } from 'openai/resources'
 import { INDEX_NAME } from './constants'
