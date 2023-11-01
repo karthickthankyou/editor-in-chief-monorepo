@@ -8,3 +8,19 @@ query articles(
     id
   }
 }
+
+query User($where: UserWhereUniqueInput) {
+  user(where: $where) {
+    name
+    image
+    updatedAt
+    createdAt
+    uid
+  }
+}
+
+mutation CreateUser($createUserInput: CreateUserInput!) {
+  createUser(createUserInput: $createUserInput) {
+    uid
+  }
+}

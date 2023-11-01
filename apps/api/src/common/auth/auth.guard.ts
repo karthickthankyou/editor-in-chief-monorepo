@@ -67,7 +67,7 @@ export class AuthGuard implements CanActivate {
     try {
       // Decode and verify JWT.
       const user = await this.jwtService.verify(token, {
-        secret: process.env.JWT_SECRET,
+        secret: process.env.NEXTAUTH_SECRET,
       })
 
       // Attach user to request.

@@ -16,6 +16,7 @@ import { Reporter } from '../reporters/entity/reporter.entity'
 import { Feedback } from '../feedbacks/entity/feedback.entity'
 import { Read } from '../reads/entity/read.entity'
 import { AIService } from 'src/common/ai/ai.service'
+import { AllowAuthenticated } from 'src/common/auth/auth.decorator'
 
 @Resolver(() => Article)
 export class ArticlesResolver {
@@ -28,7 +29,7 @@ export class ArticlesResolver {
   @Mutation(() => Article)
   async createArticle(@Args('createArticleInput') args: CreateArticleInput) {
     const article = await this.articlesService.create(args)
-    const sdf = this.ai.addRecord(article)
+    const articleForAi = this.ai.addRecord(article)
     return article
   }
 
@@ -37,6 +38,7 @@ export class ArticlesResolver {
     return this.ai.question(query)
   }
 
+  @AllowAuthenticated()
   @Query(() => [Article], { name: 'articles' })
   findAll(@Args() args: FindManyArticleArgs) {
     return this.articlesService.findAll(args)

@@ -708,9 +708,38 @@ export type ArticlesQuery = {
   articles: Array<{ __typename?: 'Article'; id: number }>
 }
 
+export type UserQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereUniqueInput>
+}>
+
+export type UserQuery = {
+  __typename?: 'Query'
+  user: {
+    __typename?: 'User'
+    name: string
+    image?: string | null
+    updatedAt: any
+    createdAt: any
+    uid: string
+  }
+}
+
+export type CreateUserMutationVariables = Exact<{
+  createUserInput: CreateUserInput
+}>
+
+export type CreateUserMutation = {
+  __typename?: 'Mutation'
+  createUser: { __typename?: 'User'; uid: string }
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
+    User: 'User',
+  },
+  Mutation: {
+    CreateUser: 'CreateUser',
   },
 }
 
@@ -816,3 +845,106 @@ export const ArticlesDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<ArticlesQuery, ArticlesQueryVariables>
+export const UserDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'User' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'UserWhereUniqueInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'updatedAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserQuery, UserQueryVariables>
+export const CreateUserDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateUser' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createUserInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateUserInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createUser' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createUserInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createUserInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>
