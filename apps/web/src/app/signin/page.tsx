@@ -1,6 +1,7 @@
 'use client'
 
 import { signIn, useSession, signOut } from 'next-auth/react'
+import { Button } from '@eic/ui/src/components/ui/button'
 
 export default function SignIn() {
   const session = useSession()
@@ -15,7 +16,7 @@ export default function SignIn() {
   }
   return (
     <div className="flex items-center justify-center">
-      <button
+      <Button
         onClick={() =>
           signIn('google', {
             redirect: true,
@@ -24,7 +25,7 @@ export default function SignIn() {
         }
       >
         Sign in with google
-      </button>
+      </Button>
     </div>
   )
 }
