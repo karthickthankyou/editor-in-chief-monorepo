@@ -4,7 +4,8 @@ import { Inter } from 'next/font/google'
 import '@eic/ui/src/index.css'
 
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
-
+import { Container } from '@eic/ui/src/components/atoms/container'
+import { Navbar } from '@eic/ui/src/components/molecules/Navbar'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -20,7 +21,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Container>
+            <Navbar />
+            <div className="py-1" />
+            {children}
+          </Container>
+        </AuthProvider>
       </body>
     </html>
   )

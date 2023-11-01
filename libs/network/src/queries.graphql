@@ -6,6 +6,10 @@ query articles(
 ) {
   articles(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
     id
+    title
+    body
+    createdAt
+    tags
   }
 }
 
@@ -22,5 +26,46 @@ query User($where: UserWhereUniqueInput) {
 mutation CreateUser($createUserInput: CreateUserInput!) {
   createUser(createUserInput: $createUserInput) {
     uid
+  }
+}
+
+query Article($where: ArticleWhereUniqueInput) {
+  article(where: $where) {
+    id
+    reporter {
+      user {
+        image
+        name
+        uid
+      }
+    }
+    body
+    createdAt
+    title
+    tags
+  }
+}
+
+query feedback($where: FeedbackWhereUniqueInput) {
+  feedback(where: $where) {
+    id
+    uid
+    articleId
+    type
+  }
+}
+
+query MyFeedback($articleId: Int!) {
+  myFeedback(articleId: $articleId) {
+    id
+    uid
+    articleId
+    type
+  }
+}
+
+mutation giveMyFeedback($articleId: Int!, $type: String!, $feedbackId: Int) {
+  giveMyFeedback(articleId: $articleId, type: $type, feedbackId: $feedbackId) {
+    id
   }
 }

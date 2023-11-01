@@ -1,17 +1,25 @@
 'use client'
 
 import { signIn, useSession, signOut } from 'next-auth/react'
-import { Button } from '@eic/ui/src/components/ui/button'
+import { Button } from '@eic/ui/src/components/atoms/button'
+import Link from 'next/link'
+import { buttonVariants } from '@eic/ui/src/components/variants'
+import { fontMerriweather } from '@eic/util/fonts'
+import { AlertBox } from '@eic/ui/src/components/molecules/AlertBox'
 
 export default function SignIn() {
   const session = useSession()
 
   if (session?.data?.user) {
     return (
-      <div>
-        <div>You are logged in</div>
-        <button onClick={() => signOut()}>signOut</button>
-      </div>
+      <AlertBox className={fontMerriweather}>
+        <div className="space-y-2">
+          <div>You are logged in.</div>
+          <Link href="/" className={buttonVariants()}>
+            Go to home page.
+          </Link>
+        </div>
+      </AlertBox>
     )
   }
   return (
@@ -20,7 +28,6 @@ export default function SignIn() {
         onClick={() =>
           signIn('google', {
             redirect: true,
-            // callbackUrl: 'http://localhost:3001',
           })
         }
       >

@@ -244,7 +244,14 @@ export enum FeedbackScalarFieldEnum {
 
 export enum FeedbackType {
   Dislike = 'DISLIKE',
+  Hate = 'HATE',
   Like = 'LIKE',
+  Love = 'LOVE',
+}
+
+export type FeedbackUidArticleIdCompoundUniqueInput = {
+  articleId: Scalars['Int']['input']
+  uid: Scalars['String']['input']
 }
 
 export type FeedbackWhereInput = {
@@ -262,7 +269,7 @@ export type FeedbackWhereInput = {
 }
 
 export type FeedbackWhereUniqueInput = {
-  id?: InputMaybe<Scalars['Int']['input']>
+  uid_articleId: FeedbackUidArticleIdCompoundUniqueInput
 }
 
 export type IntFilter = {
@@ -281,6 +288,7 @@ export type Mutation = {
   createRead: Read
   createReporter: Reporter
   createUser: User
+  giveMyFeedback: Feedback
   removeAdmin: Admin
   removeArticle: Article
   removeFeedback: Feedback
@@ -317,6 +325,12 @@ export type MutationCreateReporterArgs = {
 
 export type MutationCreateUserArgs = {
   createUserInput: CreateUserInput
+}
+
+export type MutationGiveMyFeedbackArgs = {
+  articleId: Scalars['Int']['input']
+  feedbackId?: InputMaybe<Scalars['Int']['input']>
+  type: Scalars['String']['input']
 }
 
 export type MutationRemoveAdminArgs = {
@@ -373,8 +387,9 @@ export type Query = {
   admins: Array<Admin>
   article: Article
   articles: Array<Article>
-  feedback: Feedback
+  feedback?: Maybe<Feedback>
   feedbacks: Array<Feedback>
+  myFeedback?: Maybe<Feedback>
   questionArticles: Scalars['String']['output']
   read: Read
   reads: Array<Read>
@@ -421,6 +436,10 @@ export type QueryFeedbacksArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<FeedbackWhereInput>
+}
+
+export type QueryMyFeedbackArgs = {
+  articleId: Scalars['Int']['input']
 }
 
 export type QueryQuestionArticlesArgs = {
@@ -705,7 +724,14 @@ export type ArticlesQueryVariables = Exact<{
 
 export type ArticlesQuery = {
   __typename?: 'Query'
-  articles: Array<{ __typename?: 'Article'; id: number }>
+  articles: Array<{
+    __typename?: 'Article'
+    id: number
+    title: string
+    body: string
+    createdAt: any
+    tags: Array<string>
+  }>
 }
 
 export type UserQueryVariables = Exact<{
@@ -733,13 +759,83 @@ export type CreateUserMutation = {
   createUser: { __typename?: 'User'; uid: string }
 }
 
+export type ArticleQueryVariables = Exact<{
+  where?: InputMaybe<ArticleWhereUniqueInput>
+}>
+
+export type ArticleQuery = {
+  __typename?: 'Query'
+  article: {
+    __typename?: 'Article'
+    id: number
+    body: string
+    createdAt: any
+    title: string
+    tags: Array<string>
+    reporter?: {
+      __typename?: 'Reporter'
+      user: {
+        __typename?: 'User'
+        image?: string | null
+        name: string
+        uid: string
+      }
+    } | null
+  }
+}
+
+export type FeedbackQueryVariables = Exact<{
+  where?: InputMaybe<FeedbackWhereUniqueInput>
+}>
+
+export type FeedbackQuery = {
+  __typename?: 'Query'
+  feedback?: {
+    __typename?: 'Feedback'
+    id: number
+    uid: string
+    articleId: number
+    type: FeedbackType
+  } | null
+}
+
+export type MyFeedbackQueryVariables = Exact<{
+  articleId: Scalars['Int']['input']
+}>
+
+export type MyFeedbackQuery = {
+  __typename?: 'Query'
+  myFeedback?: {
+    __typename?: 'Feedback'
+    id: number
+    uid: string
+    articleId: number
+    type: FeedbackType
+  } | null
+}
+
+export type GiveMyFeedbackMutationVariables = Exact<{
+  articleId: Scalars['Int']['input']
+  type: Scalars['String']['input']
+  feedbackId?: InputMaybe<Scalars['Int']['input']>
+}>
+
+export type GiveMyFeedbackMutation = {
+  __typename?: 'Mutation'
+  giveMyFeedback: { __typename?: 'Feedback'; id: number }
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
     User: 'User',
+    Article: 'Article',
+    feedback: 'feedback',
+    MyFeedback: 'MyFeedback',
   },
   Mutation: {
     CreateUser: 'CreateUser',
+    giveMyFeedback: 'giveMyFeedback',
   },
 }
 
@@ -837,6 +933,10 @@ export const ArticlesDocument = /*#__PURE__*/ {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
               ],
             },
           },
@@ -948,3 +1048,273 @@ export const CreateUserDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>
+export const ArticleDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Article' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ArticleWhereUniqueInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'article' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'reporter' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'user' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'image' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'uid' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ArticleQuery, ArticleQueryVariables>
+export const FeedbackDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'feedback' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'FeedbackWhereUniqueInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'feedback' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'articleId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<FeedbackQuery, FeedbackQueryVariables>
+export const MyFeedbackDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'MyFeedback' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'articleId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myFeedback' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'articleId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'articleId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'articleId' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyFeedbackQuery, MyFeedbackQueryVariables>
+export const GiveMyFeedbackDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'giveMyFeedback' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'articleId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'type' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'feedbackId' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'giveMyFeedback' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'articleId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'articleId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'type' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'type' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'feedbackId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'feedbackId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GiveMyFeedbackMutation,
+  GiveMyFeedbackMutationVariables
+>

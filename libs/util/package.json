@@ -1,0 +1,20 @@
+{
+  "name": "@eic/util",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "tsc"
+  },
+  "main": "dist/index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^2.30.0"
+  },
+  "peerDependencies": {
+    "next": "14.0.1"
+  },
+  "devDependencies": {
+    "typescript": "5"
+  }
+}

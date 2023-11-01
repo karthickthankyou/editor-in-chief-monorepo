@@ -8,6 +8,10 @@ module.exports = {
     './src/**/*.{ts,tsx}',
   ],
   theme: {
+    fontFamily: {
+      sans: ['"Merriweather Sans"', 'Arial', 'sans-serif'],
+      serif: ['Merriweather', 'serif'],
+    },
     container: {
       center: true,
       padding: '2rem',

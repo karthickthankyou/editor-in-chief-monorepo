@@ -38,8 +38,10 @@ type Feedback {
 }
 
 enum FeedbackType {
+  LOVE
   LIKE
   DISLIKE
+  HATE
 }
 
 type Read {
@@ -86,7 +88,8 @@ type Query {
   reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!
   read(where: ReadWhereUniqueInput): Read!
   feedbacks(distinct: [FeedbackScalarFieldEnum!], where: FeedbackWhereInput, orderBy: [FeedbackOrderByWithRelationInput!], cursor: FeedbackWhereUniqueInput, take: Int, skip: Int): [Feedback!]!
-  feedback(where: FeedbackWhereUniqueInput): Feedback!
+  feedback(where: FeedbackWhereUniqueInput): Feedback
+  myFeedback(articleId: Int!): Feedback
 }
 
 enum AdminScalarFieldEnum {
@@ -416,7 +419,12 @@ input FeedbackOrderByWithRelationInput {
 }
 
 input FeedbackWhereUniqueInput {
-  id: Int
+  uid_articleId: FeedbackUidArticleIdCompoundUniqueInput!
+}
+
+input FeedbackUidArticleIdCompoundUniqueInput {
+  uid: String!
+  articleId: Int!
 }
 
 type Mutation {
@@ -436,6 +444,7 @@ type Mutation {
   updateRead(updateReadInput: UpdateReadInput!): Read!
   removeRead(where: ReadWhereUniqueInput): Read!
   createFeedback(createFeedbackInput: CreateFeedbackInput!): Feedback!
+  giveMyFeedback(feedbackId: Int, articleId: Int!, type: String!): Feedback!
   updateFeedback(updateFeedbackInput: UpdateFeedbackInput!): Feedback!
   removeFeedback(where: FeedbackWhereUniqueInput): Feedback!
 }

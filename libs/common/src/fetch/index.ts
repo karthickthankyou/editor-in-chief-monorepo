@@ -32,8 +32,6 @@ export async function fetchGraphQL<TData, V>({
   const getCookies = cookies()
   const token = getCookies.get('next-auth.session-token')?.value || ''
 
-  console.log('token ', token)
-
   const query = print(document)
 
   return await fetch(process.env.NEXT_PUBLIC_API_URL + '/graphql', {

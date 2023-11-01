@@ -10,9 +10,13 @@ import { ArticleRelationFilter } from 'src/models/articles/graphql/dtos/where.ar
 import { UserRelationFilter } from 'src/models/users/graphql/dtos/where.args'
 
 @InputType()
+export class FeedbackUidArticleIdCompoundUniqueInput {
+  uid: string
+  articleId: number
+}
+@InputType()
 export class FeedbackWhereUniqueInput {
-  @Field(() => Number, { nullable: true })
-  id: number
+  uid_articleId: FeedbackUidArticleIdCompoundUniqueInput
 }
 
 @InputType()

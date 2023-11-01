@@ -86,6 +86,8 @@ model Feedback {
 }
 
 enum FeedbackType {
+    LOVE
     LIKE
     DISLIKE
+    HATE
 }
