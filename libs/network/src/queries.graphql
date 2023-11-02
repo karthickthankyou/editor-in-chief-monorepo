@@ -12,6 +12,20 @@ query articles(
     tags
   }
 }
+query articlesForAdmin(
+  $skip: Int
+  $take: Int
+  $orderBy: [ArticleOrderByWithRelationInput!]
+  $where: ArticleWhereInput
+) {
+  articlesForAdmin(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    title
+    createdAt
+    tags
+    published
+  }
+}
 
 query User($where: UserWhereUniqueInput) {
   user(where: $where) {
@@ -66,6 +80,52 @@ query MyFeedback($articleId: Int!) {
 
 mutation giveMyFeedback($articleId: Int!, $type: String!, $feedbackId: Int) {
   giveMyFeedback(articleId: $articleId, type: $type, feedbackId: $feedbackId) {
+    id
+  }
+}
+
+fragment userDetails on User {
+  image
+  name
+  uid
+}
+
+query reporterMe {
+  reporterMe {
+    user {
+      ...userDetails
+    }
+  }
+}
+
+query adminMe {
+  adminMe {
+    user {
+      ...userDetails
+    }
+  }
+}
+
+query admins {
+  admins {
+    user {
+      ...userDetails
+    }
+    createdAt
+  }
+}
+
+query reporters {
+  reporters {
+    user {
+      ...userDetails
+    }
+    createdAt
+  }
+}
+
+mutation updateArticleAdmin($updateArticleInput: UpdateArticleInput!) {
+  updateArticleAdmin(updateArticleInput: $updateArticleInput) {
     id
   }
 }

@@ -41,7 +41,10 @@ export class ArticlesResolver {
   @AllowAuthenticated()
   @Query(() => [Article], { name: 'articles' })
   findAll(@Args() args: FindManyArticleArgs) {
-    return this.articlesService.findAll(args)
+    return this.articlesService.findAll({
+      ...args,
+      where: { ...args.where, published: { equals: true } },
+    })
   }
 
   @Query(() => Article, { name: 'article' })

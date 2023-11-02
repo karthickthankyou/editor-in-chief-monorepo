@@ -73,15 +73,19 @@ type Admin {
   uid: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User!
 }
 
 type Query {
   admins(distinct: [AdminScalarFieldEnum!], where: AdminWhereInput, orderBy: [AdminOrderByWithRelationInput!], cursor: AdminWhereUniqueInput, take: Int, skip: Int): [Admin!]!
   admin(where: AdminWhereUniqueInput): Admin!
+  adminMe: Admin!
+  articlesForAdmin(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput): User!
   reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
   reporter(where: ReporterWhereUniqueInput): Reporter!
+  reporterMe: Reporter!
   questionArticles(query: String!): String!
   articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   article(where: ArticleWhereUniqueInput): Article!
@@ -323,28 +327,6 @@ input AdminWhereUniqueInput {
   uid: String!
 }
 
-enum UserScalarFieldEnum {
-  uid
-  createdAt
-  updatedAt
-  name
-  image
-}
-
-input UserWhereUniqueInput {
-  uid: String!
-}
-
-enum ReporterScalarFieldEnum {
-  uid
-  createdAt
-  updatedAt
-}
-
-input ReporterWhereUniqueInput {
-  uid: String!
-}
-
 enum ArticleScalarFieldEnum {
   id
   createdAt
@@ -372,6 +354,28 @@ input ArticleOrderByWithRelationInput {
 
 input ArticleWhereUniqueInput {
   id: Int
+}
+
+enum UserScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+  name
+  image
+}
+
+input UserWhereUniqueInput {
+  uid: String!
+}
+
+enum ReporterScalarFieldEnum {
+  uid
+  createdAt
+  updatedAt
+}
+
+input ReporterWhereUniqueInput {
+  uid: String!
 }
 
 enum ReadScalarFieldEnum {
@@ -430,6 +434,7 @@ input FeedbackUidArticleIdCompoundUniqueInput {
 type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
   updateAdmin(updateAdminInput: UpdateAdminInput!): Admin!
+  updateArticleAdmin(updateArticleInput: UpdateArticleInput!): Article!
   removeAdmin(where: AdminWhereUniqueInput): Admin!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -455,6 +460,15 @@ input CreateAdminInput {
 
 input UpdateAdminInput {
   uid: String!
+}
+
+input UpdateArticleInput {
+  title: String
+  body: String
+  published: Boolean
+  tags: [String!]
+  reporterUid: String
+  id: Int!
 }
 
 input CreateUserInput {
@@ -483,15 +497,6 @@ input CreateArticleInput {
   published: Boolean!
   tags: [String!]!
   reporterUid: String!
-}
-
-input UpdateArticleInput {
-  title: String
-  body: String
-  published: Boolean
-  tags: [String!]
-  reporterUid: String
-  id: Int!
 }
 
 input CreateReadInput {

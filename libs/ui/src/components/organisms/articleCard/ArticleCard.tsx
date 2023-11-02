@@ -29,7 +29,9 @@ export const ArticleCard = ({
         <DisplayDate dateString={article.createdAt} className="mt-2" />
         <div className="flex flex-wrap gap-2 mt-2">
           {article.tags.map((tag) => (
-            <Badge variant={'outline'}>{tag}</Badge>
+            <Badge key={tag} variant={'outline'}>
+              {tag}
+            </Badge>
           ))}
         </div>
       </Link>

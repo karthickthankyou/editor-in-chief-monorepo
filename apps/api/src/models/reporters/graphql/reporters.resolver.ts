@@ -14,6 +14,8 @@ import { UpdateReporterInput } from './dtos/update-reporter.input'
 import { PrismaService } from 'src/common/prisma/prisma.service'
 import { User } from '../../users/graphql/entity/user.entity'
 import { Article } from '../../articles/graphql/entity/article.entity'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
 
 @Resolver(() => Reporter)
 export class ReportersResolver {
@@ -35,6 +37,14 @@ export class ReportersResolver {
   @Query(() => Reporter, { name: 'reporter' })
   findOne(@Args() args: FindUniqueReporterArgs) {
     return this.reportersService.findOne(args)
+  }
+
+  @AllowAuthenticated()
+  @Query(() => Reporter, { name: 'reporterMe' })
+  reporterMe(@GetUser() user: GetUserType) {
+    return this.prisma.reporter.findUnique({
+      where: { uid: user.uid },
+    })
   }
 
   @Mutation(() => Reporter)

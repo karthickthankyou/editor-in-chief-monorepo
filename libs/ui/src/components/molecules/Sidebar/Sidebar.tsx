@@ -1,11 +1,12 @@
 'use client'
-import { Mic2, Menu } from 'lucide-react'
+import { Mic2, Menu, PenBoxIcon, LockIcon } from 'lucide-react'
+import { useDialogState } from '@eic/util/hooks'
+
 import Link from 'next/link'
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTrigger,
@@ -25,6 +26,9 @@ export interface INavSidebarProps {
 
 export function Sidebar() {
   const user = useSession()
+
+  const [open, setOpen] = useDialogState(false)
+
   if (!user.data?.user) {
     return (
       <Link href="/signin" className={buttonVariants({ variant: 'default' })}>
@@ -33,7 +37,7 @@ export function Sidebar() {
     )
   }
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost">
           <Menu className="w-5 h-5" />
@@ -43,12 +47,20 @@ export function Sidebar() {
         <SheetHeader>
           <DisplayUser />
         </SheetHeader>
-        <SheetDescription>
-          <div className="flex flex-col gap-2 mt-4 mb-8">
-            <Link href="/reporter">Reporter</Link>
-            <Link href="/admin">Admin</Link>
-          </div>
-        </SheetDescription>
+
+        <div className="flex flex-col gap-2 mt-4 mb-8">
+          <Link href="/reporter">
+            <div className="flex items-center gap-2">
+              <PenBoxIcon className="w-4 h-4" /> Reporter
+            </div>
+          </Link>
+          <Link href="/admin">
+            <div className="flex items-center gap-2">
+              <LockIcon className="w-4 h-4" /> Admin
+            </div>
+          </Link>
+        </div>
+
         <SheetFooter>
           <SheetClose asChild>
             <Link href="/api/auth/signout">Signout</Link>

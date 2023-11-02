@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Toaster } from '@eic/ui/src/components/molecules/Toaster'
 
 import '@eic/ui/src/index.css'
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             <Navbar />
             <div className="py-1" />
             {children}
+            <Toaster />
           </Container>
         </AuthProvider>
       </body>
