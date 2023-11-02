@@ -1,4 +1,4 @@
-import { ArticlesQuery } from '@eic/network/src/generated'
+import { RelatedArticlesQuery } from '@eic/network/src/generated'
 import { Badge } from '../../molecules/Badge/Badge'
 import Link from 'next/link'
 import { DisplayDate } from '../../molecules/DisplayDate'
@@ -7,11 +7,11 @@ import { cn } from '../../../utils'
 import { ReactionPanelAsync } from '../ReactionPanel/ReactionPanelAsync'
 
 export const ArticleCard = ({
-  article,
+  relatedArticle,
 }: {
-  article: ArticlesQuery['articles'][0]
+  relatedArticle: RelatedArticlesQuery['relatedArticles'][0]
 }) => {
-  console.log('article', article)
+  const { article, score } = relatedArticle
   return (
     <div className={cn(fontMerriweatherSans300, 'group')}>
       <Link href={`/article/${article.id}`}>
@@ -35,6 +35,7 @@ export const ArticleCard = ({
           ))}
         </div>
       </Link>
+      <Badge variant={'default'}>{score}</Badge>
       <ReactionPanelAsync articleId={article.id} className="mt-2" />
     </div>
   )

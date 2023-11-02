@@ -163,3 +163,16 @@ mutation createArticle($createArticleInput: CreateArticleInput!) {
     id
   }
 }
+
+query relatedArticles {
+  relatedArticles {
+    article {
+      id
+      title
+      body
+      createdAt
+      tags
+    }
+    score
+  }
+}

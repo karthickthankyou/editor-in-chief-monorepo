@@ -1,4 +1,4 @@
-import { ObjectType } from '@nestjs/graphql'
+import { Field, Float, ObjectType } from '@nestjs/graphql'
 import { Article as ArticleType } from '@prisma/client'
 import { RestrictProperties } from 'src/common/dtos/common.input'
 
@@ -14,4 +14,11 @@ export class Article implements RestrictProperties<Article, ArticleType> {
   reporterUid: string
   // Todo Add below to make optional fields optional.
   // @Field({ nullable: true })
+}
+
+@ObjectType()
+export class ArticleWithScore {
+  @Field(() => Float)
+  score: number
+  article: Article
 }

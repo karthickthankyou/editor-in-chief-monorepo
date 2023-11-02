@@ -7,7 +7,7 @@ import {
   Parent,
 } from '@nestjs/graphql'
 import { ArticlesService } from './articles.service'
-import { Article } from './entity/article.entity'
+import { Article, ArticleWithScore } from './entity/article.entity'
 import { FindManyArticleArgs, FindUniqueArticleArgs } from './dtos/find.args'
 import { CreateArticleInput } from './dtos/create-article.input'
 import { UpdateArticleInput } from './dtos/update-article.input'
@@ -56,6 +56,27 @@ export class ArticlesResolver {
       ...args,
       where: { ...args.where, reporterUid: { equals: user.uid } },
     })
+  }
+
+  @AllowAuthenticated()
+  @Query(() => [ArticleWithScore], { name: 'relatedArticles' })
+  async relatedArticles(@GetUser() user: GetUserType) {
+    const related = await this.ai.queryRelatedArticles({ uid: user.uid })
+
+    const articles = await this.prisma.article.findMany({
+      where: {
+        id: {
+          in: related.map(({ id }) => +id),
+        },
+      },
+    })
+
+    const articlesWithScores = related.map(({ id, score }) => {
+      const article = articles.find((article) => article.id === +id)
+      return { score, article }
+    })
+
+    return articlesWithScores
   }
 
   @Query(() => Article, { name: 'article' })

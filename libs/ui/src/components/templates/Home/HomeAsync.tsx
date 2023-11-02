@@ -1,12 +1,12 @@
 import { Home } from './Home'
 import { fetchGraphQL } from '@eic/common/src/fetch'
-import { ArticlesDocument } from '@eic/network/src/generated'
+import { RelatedArticlesDocument } from '@eic/network/src/generated'
 
 export const HomeAsync = async () => {
-  const articles = await fetchGraphQL({ document: ArticlesDocument })
+  const articles = await fetchGraphQL({ document: RelatedArticlesDocument })
   if (!articles.data) {
     return null
   }
 
-  return <Home articles={articles.data.articles} />
+  return <Home articles={articles.data.relatedArticles} />
 }

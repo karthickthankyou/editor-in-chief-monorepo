@@ -146,6 +146,12 @@ export type ArticleWhereUniqueInput = {
   id?: InputMaybe<Scalars['Int']['input']>
 }
 
+export type ArticleWithScore = {
+  __typename?: 'ArticleWithScore'
+  article: Article
+  score: Scalars['Float']['output']
+}
+
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']['input']>
   not?: InputMaybe<Scalars['Boolean']['input']>
@@ -397,6 +403,7 @@ export type Query = {
   questionArticles: Scalars['String']['output']
   read: Read
   reads: Array<Read>
+  relatedArticles: Array<ArticleWithScore>
   reporter: Reporter
   reporterMe: Reporter
   reporters: Array<Reporter>
@@ -1004,6 +1011,24 @@ export type CreateArticleMutation = {
   createArticle: { __typename?: 'Article'; id: number }
 }
 
+export type RelatedArticlesQueryVariables = Exact<{ [key: string]: never }>
+
+export type RelatedArticlesQuery = {
+  __typename?: 'Query'
+  relatedArticles: Array<{
+    __typename?: 'ArticleWithScore'
+    score: number
+    article: {
+      __typename?: 'Article'
+      id: number
+      title: string
+      body: string
+      createdAt: any
+      tags: Array<string>
+    }
+  }>
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
@@ -1017,6 +1042,7 @@ export const namedOperations = {
     adminMe: 'adminMe',
     admins: 'admins',
     reporters: 'reporters',
+    relatedArticles: 'relatedArticles',
   },
   Mutation: {
     CreateUser: 'CreateUser',
@@ -2229,4 +2255,49 @@ export const CreateArticleDocument = /*#__PURE__*/ {
 } as unknown as DocumentNode<
   CreateArticleMutation,
   CreateArticleMutationVariables
+>
+export const RelatedArticlesDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'relatedArticles' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'relatedArticles' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'article' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'body' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'createdAt' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'score' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RelatedArticlesQuery,
+  RelatedArticlesQueryVariables
 >

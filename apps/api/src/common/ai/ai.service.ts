@@ -71,6 +71,26 @@ export class AIService {
     ])
   }
 
+  async queryRelatedArticles({
+    uid,
+  }: {
+    uid: string
+  }): Promise<{ id: string; score: number }[]> {
+    const { records } = await this.pineconeIndex.fetch([uid])
+
+    const userRecord = records[uid]
+
+    const queryResponse = await this.pineconeIndex.query({
+      topK: 10,
+      vector: userRecord.values,
+      includeMetadata: false,
+      includeValues: false,
+      filter: { type: 'article' },
+    })
+
+    return queryResponse.matches.map(({ id, score }) => ({ id, score }))
+  }
+
   async addUser({ uid }: { uid: string }) {
     const values = await this.createEmbedding('')
 
