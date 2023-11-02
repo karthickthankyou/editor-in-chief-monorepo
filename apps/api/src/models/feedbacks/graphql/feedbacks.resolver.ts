@@ -17,12 +17,14 @@ import { Article } from '../../articles/graphql/entity/article.entity'
 import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
 import { GetUserType } from 'src/common/util/types'
 import { FeedbackType } from '@prisma/client'
+import { AIService } from 'src/common/ai/ai.service'
 
 @Resolver(() => Feedback)
 export class FeedbacksResolver {
   constructor(
     private readonly feedbacksService: FeedbacksService,
     private readonly prisma: PrismaService,
+    private readonly ai: AIService,
   ) {}
 
   @Mutation(() => Feedback)
@@ -53,30 +55,37 @@ export class FeedbacksResolver {
 
   @AllowAuthenticated()
   @Mutation(() => Feedback, { name: 'giveMyFeedback' })
-  giveMyFeedback(
+  async giveMyFeedback(
     @Args('feedbackId', { nullable: true }) feedbackId: number,
     @Args('articleId') articleId: number,
     @Args('type') type: FeedbackType,
     @GetUser() user: GetUserType,
   ) {
     const uid = user.uid
-    return this.prisma.feedback.upsert({
-      create: {
-        type,
-        articleId,
-        uid,
-      },
-      update: {
-        type,
-      },
-      where: {
-        id: feedbackId,
-        uid_articleId: {
+    try {
+      const feedback = await this.prisma.feedback.upsert({
+        create: {
+          type,
           articleId,
           uid,
         },
-      },
-    })
+        update: {
+          type,
+        },
+        where: {
+          id: feedbackId,
+          uid_articleId: {
+            articleId,
+            uid,
+          },
+        },
+      })
+
+      await this.ai.giveFeedback({ articleId, type, uid })
+      return feedback
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   @Mutation(() => Feedback)

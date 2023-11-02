@@ -1,9 +1,7 @@
 import { fetchGraphQL } from '@eic/common/src/fetch'
 import { MyArticlesDocument } from '@eic/network/src/generated'
-import { OpinionatedGrid } from '@eic/ui/src/components/molecules/OpinionatedGrid'
 import { UpdateArticleStateButton } from '@eic/ui/src/components/organisms/ActionButton/UnpublishButton'
 import { ArticleCardSimple } from '@eic/ui/src/components/organisms/ArticleCardSimple'
-import { NewArticle } from '@eic/ui/src/components/templates/NewArticle'
 
 export default async function MyArticles() {
   const { data } = await fetchGraphQL({

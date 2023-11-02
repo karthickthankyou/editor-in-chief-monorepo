@@ -6,6 +6,7 @@ import { Article } from 'src/models/articles/graphql/entity/article.entity'
 import OpenAI from 'openai'
 import { ChatCompletionMessageParam } from 'openai/resources'
 import { INDEX_NAME } from './constants'
+import { FeedbackType, User } from '@prisma/client'
 
 @Injectable()
 export class AIService {
@@ -28,6 +29,87 @@ export class AIService {
       input: content,
       model: 'text-embedding-ada-002',
     })
+  }
+
+  async giveFeedback({
+    uid,
+    articleId,
+    type,
+  }: {
+    uid: string
+    articleId: number
+    type: FeedbackType
+  }) {
+    const { records } = await this.pineconeIndex.fetch([
+      uid,
+      articleId.toString(),
+    ])
+
+    const userRecord = records[uid]
+    const articleRecord = records[articleId.toString()]
+
+    if (!userRecord || !articleRecord) {
+      throw new Error('User or article vector not found')
+    }
+
+    const userVector = userRecord.values
+    const articleVector = articleRecord.values
+
+    const adjustmentScale = this.getAdjustmentScale(type)
+
+    const newUserVector = userVector.map(
+      (value, index) =>
+        value + adjustmentScale * (articleVector[index] - value),
+    )
+
+    await this.pineconeIndex.upsert([
+      {
+        id: uid,
+        values: newUserVector,
+        metadata: { type: 'user' },
+      },
+    ])
+  }
+
+  async addUser({ uid }: { uid: string }) {
+    const values = await this.createEmbedding('')
+
+    this.pineconeIndex.upsert([
+      {
+        id: uid,
+        values: values.data[0].embedding,
+        metadata: {
+          id: uid,
+          type: 'user',
+        },
+      },
+    ])
+  }
+
+  private getAdjustmentScale(type: FeedbackType): number {
+    switch (type) {
+      case FeedbackType.LOVE:
+        return 0.3
+      case FeedbackType.LIKE:
+        return 0.1
+      case FeedbackType.DISLIKE:
+        return -0.1
+      case FeedbackType.HATE:
+        return -0.3
+      default:
+        return 0
+    }
+  }
+
+  private calculateNewVector(
+    userVector: number[],
+    articleVector: number[],
+    scale: number,
+  ): number[] {
+    // Move user vector towards or away from the article vector based on feedback scale.
+    return userVector.map(
+      (value, index) => value + scale * (articleVector[index] - value),
+    )
   }
 
   async addRecord({
@@ -63,7 +145,7 @@ export class AIService {
       {
         id: id.toString(),
         values: values.data[0].embedding,
-        metadata: article,
+        metadata: { ...article, type: 'article' },
       },
     ])
   }
@@ -75,6 +157,7 @@ export class AIService {
       topK: 10,
       vector: queryEmbedding.data[0].embedding,
       includeMetadata: true,
+      filter: { type: 'article' },
     })
 
     console.log(`Found ${queryResponse.matches.length} matches...`)

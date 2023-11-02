@@ -15,17 +15,21 @@ import { PrismaService } from 'src/common/prisma/prisma.service'
 import { Reporter } from '../../reporters/graphql/entity/reporter.entity'
 import { Feedback } from '../../feedbacks/graphql/entity/feedback.entity'
 import { Read } from '../../reads/graphql/entity/read.entity'
+import { AIService } from 'src/common/ai/ai.service'
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly prisma: PrismaService,
+    private readonly ai: AIService,
   ) {}
 
   @Mutation(() => User)
-  createUser(@Args('createUserInput') args: CreateUserInput) {
-    return this.usersService.create(args)
+  async createUser(@Args('createUserInput') args: CreateUserInput) {
+    const user = await this.usersService.create(args)
+    const aiUser = this.ai.addUser({ uid: user.uid })
+    return user
   }
 
   @Query(() => [User], { name: 'users' })

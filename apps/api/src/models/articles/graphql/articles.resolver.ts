@@ -31,7 +31,7 @@ export class ArticlesResolver {
   @Mutation(() => Article)
   async createArticle(@Args('createArticleInput') args: CreateArticleInput) {
     const article = await this.articlesService.create(args)
-    const articleForAi = this.ai.addRecord(article)
+    const articleForAi = await this.ai.addRecord(article)
     return article
   }
 
