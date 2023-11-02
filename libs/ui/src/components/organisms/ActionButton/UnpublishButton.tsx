@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '../../atoms/button'
 import { cn } from '../../../utils'
 import { updateArticleAdmin } from '@eic/common/src/actions/unpublishArticle'
 import { BaseComponent } from '@eic/util/types'
@@ -10,21 +9,23 @@ type InpublishButtonType = {
   published: boolean
 }
 
-export const UnpublishButton = ({
+export const UpdateArticleStateButton = ({
   articleId,
   className,
   published,
 }: BaseComponent & InpublishButtonType) => {
   return (
-    <Button
-      className={cn('text-red-500 border border-red-500', className)}
-      variant={'outline'}
-      size={'sm'}
+    <button
+      className={cn(
+        ' text-xs underline underline-offset-4',
+        published ? 'text-red-500' : '',
+        className,
+      )}
       onClick={async () => {
         await updateArticleAdmin({ articleId, published: !published })
       }}
     >
       {published ? 'Unpublish' : 'Publish'}
-    </Button>
+    </button>
   )
 }

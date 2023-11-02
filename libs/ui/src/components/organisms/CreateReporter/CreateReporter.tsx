@@ -1,25 +1,20 @@
-'use client'
-import { useState } from 'react'
-import { Dialog } from '../../atoms/Dialog'
-import { DialogContent, DialogTrigger } from '../../atoms/Dialog/Dialog'
-import { Button } from '../../atoms/button'
+import { Input } from '../../atoms/Input'
+import { SimpleDialog } from '../../molecules/SimpleDialog'
+import { createReporter } from '@eic/common/src/actions/createReporter'
+import { Form } from '../../molecules/Form'
+import { Label } from '../../atoms/Label'
 
 export interface ICreateReporterProps {}
 
 export const CreateReporter = () => {
-  const [open, setOpen] = useState(false)
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">+ Add Reporter</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        Hey there.
-        {/* <FormProviderCreateCategory>
-          <CreateCategoryContent closeDialog={() => setOpen(false)} />
-        </FormProviderCreateCategory> */}
-      </DialogContent>
-    </Dialog>
+    <SimpleDialog buttonText="+ New Reporter">
+      Create new reporter
+      <Form action={createReporter} className="space-y-2">
+        <Label title="Reporter UID">
+          <Input placeholder="Enter the reporter uid" name="reporterUid" />
+        </Label>
+      </Form>
+    </SimpleDialog>
   )
 }

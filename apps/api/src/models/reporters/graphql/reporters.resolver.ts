@@ -24,11 +24,13 @@ export class ReportersResolver {
     private readonly prisma: PrismaService,
   ) {}
 
+  @AllowAuthenticated('admin')
   @Mutation(() => Reporter)
   createReporter(@Args('createReporterInput') args: CreateReporterInput) {
     return this.reportersService.create(args)
   }
 
+  @AllowAuthenticated('admin')
   @Query(() => [Reporter], { name: 'reporters' })
   findAll(@Args() args: FindManyReporterArgs) {
     return this.reportersService.findAll(args)

@@ -942,6 +942,24 @@ export type UpdateArticleAdminMutation = {
   updateArticleAdmin: { __typename?: 'Article'; id: number }
 }
 
+export type CreateReporterMutationVariables = Exact<{
+  createReporterInput: CreateReporterInput
+}>
+
+export type CreateReporterMutation = {
+  __typename?: 'Mutation'
+  createReporter: { __typename?: 'Reporter'; uid: string }
+}
+
+export type CreateAdminMutationVariables = Exact<{
+  createAdminInput: CreateAdminInput
+}>
+
+export type CreateAdminMutation = {
+  __typename?: 'Mutation'
+  createAdmin: { __typename?: 'Admin'; uid: string }
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
@@ -959,6 +977,8 @@ export const namedOperations = {
     CreateUser: 'CreateUser',
     giveMyFeedback: 'giveMyFeedback',
     updateArticleAdmin: 'updateArticleAdmin',
+    createReporter: 'createReporter',
+    createAdmin: 'createAdmin',
   },
   Fragment: {
     userDetails: 'userDetails',
@@ -1841,3 +1861,108 @@ export const UpdateArticleAdminDocument = /*#__PURE__*/ {
   UpdateArticleAdminMutation,
   UpdateArticleAdminMutationVariables
 >
+export const CreateReporterDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createReporter' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createReporterInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateReporterInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createReporter' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createReporterInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createReporterInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateReporterMutation,
+  CreateReporterMutationVariables
+>
+export const CreateAdminDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createAdmin' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createAdminInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateAdminInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createAdmin' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createAdminInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createAdminInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<CreateAdminMutation, CreateAdminMutationVariables>

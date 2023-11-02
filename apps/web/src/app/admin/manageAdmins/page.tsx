@@ -1,6 +1,7 @@
 import { fetchGraphQL } from '@eic/common/src/fetch'
 import { UserCard } from '@eic/ui/src/components/organisms/UserCard'
 import { CreateAdmin } from '@eic/ui/src/components/organisms/CreateAdmin'
+import { OpinionatedGrid } from '@eic/ui/src/components/molecules/OpinionatedGrid'
 import { AdminsDocument } from '@eic/network/src/generated'
 
 export default async function ManageAdmins() {
@@ -12,12 +13,11 @@ export default async function ManageAdmins() {
         <div>Manage Admins</div>
         <CreateAdmin />
       </div>
-      <div className="grid grid-cols-6">
+      <OpinionatedGrid>
         {data?.admins.map((admin) => (
           <UserCard key={admin.user.uid} user={admin.user} />
         ))}
-        CreateAdmin
-      </div>
+      </OpinionatedGrid>
     </div>
   )
 }

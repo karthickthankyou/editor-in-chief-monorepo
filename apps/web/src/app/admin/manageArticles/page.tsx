@@ -1,7 +1,6 @@
 import { fetchGraphQL } from '@eic/common/src/fetch'
 import { ArticlesForAdminDocument } from '@eic/network/src/generated'
-import { ActionButton } from '@eic/ui/src/components/organisms/ActionButton'
-import { UnpublishButton } from '@eic/ui/src/components/organisms/ActionButton/UnpublishButton'
+import { UpdateArticleStateButton } from '@eic/ui/src/components/organisms/ActionButton/UnpublishButton'
 import { ArticleCardSimple } from '@eic/ui/src/components/organisms/ArticleCardSimple'
 
 export default async function ManageArticles() {
@@ -14,7 +13,7 @@ export default async function ManageArticles() {
         {data?.articlesForAdmin.map((article) => (
           <div key={article.id}>
             <ArticleCardSimple article={article} />
-            <UnpublishButton
+            <UpdateArticleStateButton
               published={article.published}
               articleId={article.id}
               className="mt-2"

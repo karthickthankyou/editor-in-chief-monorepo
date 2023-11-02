@@ -15,8 +15,10 @@ export const UserCard = ({ user }: IUserCardProps) => {
         height={300}
         className="rounded "
       />
-      <div>{user.name}</div>
-      <div>{user.uid}</div>
+      <div className="mt-2 font-medium">{user.name}</div>
+      <div className="text-xs text-gray-500 whitespace-pre-wrap">
+        {user.uid}
+      </div>
     </div>
   )
 }

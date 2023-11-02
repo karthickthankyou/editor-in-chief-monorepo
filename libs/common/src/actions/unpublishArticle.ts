@@ -18,7 +18,7 @@ export async function updateArticleAdmin({
   published,
 }: UpdateArticleAdminType) {
   console.log('article', articleId)
-  const { data, error } = await fetchGraphQL({
+  const { data } = await fetchGraphQL({
     document: UpdateArticleAdminDocument,
     variables: {
       updateArticleInput: {

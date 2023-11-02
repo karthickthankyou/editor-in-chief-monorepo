@@ -2,6 +2,7 @@ import { fetchGraphQL } from '@eic/common/src/fetch'
 import { ReportersDocument } from '@eic/network/src/generated'
 import { UserCard } from '@eic/ui/src/components/organisms/UserCard'
 import { CreateReporter } from '@eic/ui/src/components/organisms/CreateReporter'
+import { OpinionatedGrid } from '@eic/ui/src/components/molecules/OpinionatedGrid'
 
 export default async function ManageReporters() {
   const { data } = await fetchGraphQL({ document: ReportersDocument })
@@ -12,11 +13,11 @@ export default async function ManageReporters() {
         <div>Manage Reporters</div>
         <CreateReporter />
       </div>
-      <div className="grid grid-cols-6">
+      <OpinionatedGrid>
         {data?.reporters.map((reporter) => (
           <UserCard key={reporter.user.uid} user={reporter.user} />
         ))}
-      </div>
+      </OpinionatedGrid>
     </div>
   )
 }

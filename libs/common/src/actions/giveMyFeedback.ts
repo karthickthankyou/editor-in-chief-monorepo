@@ -21,7 +21,7 @@ export async function giveMyFeedback(input: CreateFeedbackType) {
   const result = formCreateFeedback.safeParse(input)
   if (result.success) {
     const { articleId, type, feedbackId } = result.data
-    const { data, error } = await fetchGraphQL({
+    const { data } = await fetchGraphQL({
       document: GiveMyFeedbackDocument,
       variables: {
         articleId,

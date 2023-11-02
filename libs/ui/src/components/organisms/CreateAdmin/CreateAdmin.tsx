@@ -1,25 +1,20 @@
-'use client'
-import { useState } from 'react'
-import { Dialog } from '../../atoms/Dialog'
-import { DialogContent, DialogTrigger } from '../../atoms/Dialog/Dialog'
-import { Button } from '../../atoms/button'
+import { Input } from '../../atoms/Input'
+import { SimpleDialog } from '../../molecules/SimpleDialog'
+import { createAdmin } from '@eic/common/src/actions/createAdmin'
+import { Form } from '../../molecules/Form'
+import { Label } from '../../atoms/Label'
 
-export interface ICreateAdminProps {}
+export interface ICreateReporterProps {}
 
 export const CreateAdmin = () => {
-  const [open, setOpen] = useState(false)
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">+ Add Admin</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        Hey there.
-        {/* <FormProviderCreateCategory>
-          <CreateCategoryContent closeDialog={() => setOpen(false)} />
-        </FormProviderCreateCategory> */}
-      </DialogContent>
-    </Dialog>
+    <SimpleDialog buttonText="+ New Admin">
+      Create new admin
+      <Form action={createAdmin} className="space-y-2">
+        <Label title="UID">
+          <Input placeholder="Enter the uid" name="adminUid" />
+        </Label>
+      </Form>
+    </SimpleDialog>
   )
 }
