@@ -960,6 +960,15 @@ export type CreateAdminMutation = {
   createAdmin: { __typename?: 'Admin'; uid: string }
 }
 
+export type CreateArticleMutationVariables = Exact<{
+  createArticleInput: CreateArticleInput
+}>
+
+export type CreateArticleMutation = {
+  __typename?: 'Mutation'
+  createArticle: { __typename?: 'Article'; id: number }
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
@@ -979,6 +988,7 @@ export const namedOperations = {
     updateArticleAdmin: 'updateArticleAdmin',
     createReporter: 'createReporter',
     createAdmin: 'createAdmin',
+    createArticle: 'createArticle',
   },
   Fragment: {
     userDetails: 'userDetails',
@@ -1966,3 +1976,57 @@ export const CreateAdminDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<CreateAdminMutation, CreateAdminMutationVariables>
+export const CreateArticleDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'createArticle' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createArticleInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateArticleInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createArticle' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createArticleInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createArticleInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateArticleMutation,
+  CreateArticleMutationVariables
+>

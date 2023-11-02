@@ -23,7 +23,7 @@ export const ArticleCard = ({
         >
           {article.title}
         </div>
-        <div className="max-w-md mt-1 text-sm gray-500 text- line-clamp-2">
+        <div className="max-w-md mt-1 text-sm gray-500 line-clamp-2">
           {article.body}
         </div>
         <DisplayDate dateString={article.createdAt} className="mt-2" />

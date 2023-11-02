@@ -141,3 +141,9 @@ mutation createAdmin($createAdminInput: CreateAdminInput!) {
     uid
   }
 }
+
+mutation createArticle($createArticleInput: CreateArticleInput!) {
+  createArticle(createArticleInput: $createArticleInput) {
+    id
+  }
+}

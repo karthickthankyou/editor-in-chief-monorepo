@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@eic/forms": "workspace:^",
     "@eic/network": "workspace:^",
     "@eic/util": "workspace:^",
     "@graphql-typed-document-node/core": "^3.2.0",

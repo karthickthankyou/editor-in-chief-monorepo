@@ -5,6 +5,7 @@ export const ReporterMenu = () => {
     <div className="flex flex-col gap-1">
       <Link href="/reporter">Dashboard</Link>
       <Link href="/reporter/newArticle">New article</Link>
+      <Link href="/reporter/myArticles">My articles</Link>
     </div>
   )
 }

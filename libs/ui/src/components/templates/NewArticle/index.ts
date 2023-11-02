@@ -1,0 +1,1 @@
+export { NewArticle } from './NewArticle'

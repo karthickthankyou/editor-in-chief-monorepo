@@ -14,7 +14,7 @@ export const ArticlePage = ({ article }: IArticlePageProps) => {
       <h1 className={cn(fontMerriweather, 'text-xl')}>{article.title}</h1>
       <DisplayDate dateString={article.createdAt} />
 
-      <div className="max-w-lg mt-4">{article.body}</div>
+      <div className="max-w-lg mt-4 whitespace-pre">{article.body}</div>
       <ReactionPanelAsync articleId={article.id} />
     </div>
   )
