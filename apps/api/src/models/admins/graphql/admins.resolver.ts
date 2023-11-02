@@ -60,11 +60,11 @@ export class AdminsResolver {
     return this.prisma.article.findMany(args)
   }
 
-  @Mutation(() => Article)
-  updateArticleAdmin(@Args('updateArticleInput') args: UpdateArticleInput) {
-    const { id, ...data } = args
-    return this.prisma.article.update({ data, where: { id } })
-  }
+  //   @Mutation(() => Article)
+  //   updateArticleAdmin(@Args('updateArticleInput') args: UpdateArticleInput) {
+  //     const { id, ...data } = args
+  //     return this.prisma.article.update({ data, where: { id } })
+  //   }
 
   @Mutation(() => Admin)
   removeAdmin(@Args() args: FindUniqueAdminArgs) {

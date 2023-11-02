@@ -16,7 +16,9 @@ import { Reporter } from '../../reporters/graphql/entity/reporter.entity'
 import { Feedback } from '../../feedbacks/graphql/entity/feedback.entity'
 import { Read } from '../../reads/graphql/entity/read.entity'
 import { AIService } from 'src/common/ai/ai.service'
-import { AllowAuthenticated } from 'src/common/auth/auth.decorator'
+import { AllowAuthenticated, GetUser } from 'src/common/auth/auth.decorator'
+import { GetUserType } from 'src/common/util/types'
+import { checkRowLevelPermission } from 'src/common/util'
 
 @Resolver(() => Article)
 export class ArticlesResolver {
@@ -47,13 +49,30 @@ export class ArticlesResolver {
     })
   }
 
+  @AllowAuthenticated()
+  @Query(() => [Article], { name: 'myArticles' })
+  myArticles(@Args() args: FindManyArticleArgs, @GetUser() user: GetUserType) {
+    return this.articlesService.findAll({
+      ...args,
+      where: { ...args.where, reporterUid: { equals: user.uid } },
+    })
+  }
+
   @Query(() => Article, { name: 'article' })
   findOne(@Args() args: FindUniqueArticleArgs) {
     return this.articlesService.findOne(args)
   }
 
+  @AllowAuthenticated('admin', 'reporter')
   @Mutation(() => Article)
-  updateArticle(@Args('updateArticleInput') args: UpdateArticleInput) {
+  async updateArticle(
+    @Args('updateArticleInput') args: UpdateArticleInput,
+    @GetUser() user: GetUserType,
+  ) {
+    const article = await this.prisma.article.findUnique({
+      where: { id: args.id },
+    })
+    checkRowLevelPermission(user, article.reporterUid)
     return this.articlesService.update(args)
   }
 

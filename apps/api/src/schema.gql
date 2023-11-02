@@ -88,6 +88,7 @@ type Query {
   reporterMe: Reporter!
   questionArticles(query: String!): String!
   articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
+  myArticles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   article(where: ArticleWhereUniqueInput): Article!
   reads(distinct: [ReadScalarFieldEnum!], where: ReadWhereInput, orderBy: [ReadOrderByWithRelationInput!], cursor: ReadWhereUniqueInput, take: Int, skip: Int): [Read!]!
   read(where: ReadWhereUniqueInput): Read!
@@ -434,7 +435,6 @@ input FeedbackUidArticleIdCompoundUniqueInput {
 type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
   updateAdmin(updateAdminInput: UpdateAdminInput!): Admin!
-  updateArticleAdmin(updateArticleInput: UpdateArticleInput!): Article!
   removeAdmin(where: AdminWhereUniqueInput): Admin!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -460,15 +460,6 @@ input CreateAdminInput {
 
 input UpdateAdminInput {
   uid: String!
-}
-
-input UpdateArticleInput {
-  title: String
-  body: String
-  published: Boolean
-  tags: [String!]
-  reporterUid: String
-  id: Int!
 }
 
 input CreateUserInput {
@@ -497,6 +488,15 @@ input CreateArticleInput {
   published: Boolean!
   tags: [String!]!
   reporterUid: String!
+}
+
+input UpdateArticleInput {
+  title: String
+  body: String
+  published: Boolean
+  tags: [String!]
+  reporterUid: String
+  id: Int!
 }
 
 input CreateReadInput {

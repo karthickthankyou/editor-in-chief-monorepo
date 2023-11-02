@@ -12,6 +12,15 @@ query articles(
     tags
   }
 }
+
+fragment articlesDetails on Article {
+  id
+  title
+  createdAt
+  tags
+  published
+}
+
 query articlesForAdmin(
   $skip: Int
   $take: Int
@@ -19,11 +28,18 @@ query articlesForAdmin(
   $where: ArticleWhereInput
 ) {
   articlesForAdmin(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
-    id
-    title
-    createdAt
-    tags
-    published
+    ...articlesDetails
+  }
+}
+
+query myArticles(
+  $skip: Int
+  $take: Int
+  $orderBy: [ArticleOrderByWithRelationInput!]
+  $where: ArticleWhereInput
+) {
+  myArticles(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    ...articlesDetails
   }
 }
 
@@ -124,8 +140,8 @@ query reporters {
   }
 }
 
-mutation updateArticleAdmin($updateArticleInput: UpdateArticleInput!) {
-  updateArticleAdmin(updateArticleInput: $updateArticleInput) {
+mutation updateArticle($updateArticleInput: UpdateArticleInput!) {
+  updateArticle(updateArticleInput: $updateArticleInput) {
     id
   }
 }

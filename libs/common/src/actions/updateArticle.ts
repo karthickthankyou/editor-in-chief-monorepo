@@ -1,7 +1,7 @@
 'use server'
 
 import {
-  UpdateArticleAdminDocument,
+  UpdateArticleDocument,
   namedOperations,
 } from '@pnpm-krowd/network/src/generated'
 import { revalidateTag } from 'next/cache'
@@ -19,7 +19,7 @@ export async function updateArticleAdmin({
 }: UpdateArticleAdminType) {
   console.log('article', articleId)
   const { data } = await fetchGraphQL({
-    document: UpdateArticleAdminDocument,
+    document: UpdateArticleDocument,
     variables: {
       updateArticleInput: {
         id: articleId,
@@ -28,8 +28,9 @@ export async function updateArticleAdmin({
     },
   })
   console.log('data ', data)
-  if (data?.updateArticleAdmin) {
+  if (data?.updateArticle) {
     revalidateTag(namedOperations.Query.articlesForAdmin)
+    revalidateTag(namedOperations.Query.myArticles)
     return data
   }
 }

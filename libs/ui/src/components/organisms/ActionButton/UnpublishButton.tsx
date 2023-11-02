@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '../../../utils'
-import { updateArticleAdmin } from '@eic/common/src/actions/unpublishArticle'
+import { updateArticleAdmin } from '@eic/common/src/actions/updateArticle'
 import { BaseComponent } from '@eic/util/types'
 
 type InpublishButtonType = {

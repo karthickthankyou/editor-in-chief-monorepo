@@ -298,7 +298,6 @@ export type Mutation = {
   removeUser: User
   updateAdmin: Admin
   updateArticle: Article
-  updateArticleAdmin: Article
   updateFeedback: Feedback
   updateRead: Read
   updateReporter: Reporter
@@ -367,10 +366,6 @@ export type MutationUpdateArticleArgs = {
   updateArticleInput: UpdateArticleInput
 }
 
-export type MutationUpdateArticleAdminArgs = {
-  updateArticleInput: UpdateArticleInput
-}
-
 export type MutationUpdateFeedbackArgs = {
   updateFeedbackInput: UpdateFeedbackInput
 }
@@ -397,6 +392,7 @@ export type Query = {
   articlesForAdmin: Array<Article>
   feedback?: Maybe<Feedback>
   feedbacks: Array<Feedback>
+  myArticles: Array<Article>
   myFeedback?: Maybe<Feedback>
   questionArticles: Scalars['String']['output']
   read: Read
@@ -454,6 +450,15 @@ export type QueryFeedbacksArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<FeedbackWhereInput>
+}
+
+export type QueryMyArticlesArgs = {
+  cursor?: InputMaybe<ArticleWhereUniqueInput>
+  distinct?: InputMaybe<Array<ArticleScalarFieldEnum>>
+  orderBy?: InputMaybe<Array<ArticleOrderByWithRelationInput>>
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  where?: InputMaybe<ArticleWhereInput>
 }
 
 export type QueryMyFeedbackArgs = {
@@ -752,6 +757,15 @@ export type ArticlesQuery = {
   }>
 }
 
+export type ArticlesDetailsFragment = {
+  __typename?: 'Article'
+  id: number
+  title: string
+  createdAt: any
+  tags: Array<string>
+  published: boolean
+}
+
 export type ArticlesForAdminQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
@@ -764,6 +778,27 @@ export type ArticlesForAdminQueryVariables = Exact<{
 export type ArticlesForAdminQuery = {
   __typename?: 'Query'
   articlesForAdmin: Array<{
+    __typename?: 'Article'
+    id: number
+    title: string
+    createdAt: any
+    tags: Array<string>
+    published: boolean
+  }>
+}
+
+export type MyArticlesQueryVariables = Exact<{
+  skip?: InputMaybe<Scalars['Int']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<
+    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
+  >
+  where?: InputMaybe<ArticleWhereInput>
+}>
+
+export type MyArticlesQuery = {
+  __typename?: 'Query'
+  myArticles: Array<{
     __typename?: 'Article'
     id: number
     title: string
@@ -933,13 +968,13 @@ export type ReportersQuery = {
   }>
 }
 
-export type UpdateArticleAdminMutationVariables = Exact<{
+export type UpdateArticleMutationVariables = Exact<{
   updateArticleInput: UpdateArticleInput
 }>
 
-export type UpdateArticleAdminMutation = {
+export type UpdateArticleMutation = {
   __typename?: 'Mutation'
-  updateArticleAdmin: { __typename?: 'Article'; id: number }
+  updateArticle: { __typename?: 'Article'; id: number }
 }
 
 export type CreateReporterMutationVariables = Exact<{
@@ -973,6 +1008,7 @@ export const namedOperations = {
   Query: {
     articles: 'articles',
     articlesForAdmin: 'articlesForAdmin',
+    myArticles: 'myArticles',
     User: 'User',
     Article: 'Article',
     feedback: 'feedback',
@@ -985,15 +1021,39 @@ export const namedOperations = {
   Mutation: {
     CreateUser: 'CreateUser',
     giveMyFeedback: 'giveMyFeedback',
-    updateArticleAdmin: 'updateArticleAdmin',
+    updateArticle: 'updateArticle',
     createReporter: 'createReporter',
     createAdmin: 'createAdmin',
     createArticle: 'createArticle',
   },
   Fragment: {
+    articlesDetails: 'articlesDetails',
     userDetails: 'userDetails',
   },
 }
+export const ArticlesDetailsFragmentDoc = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'articlesDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Article' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'published' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ArticlesDetailsFragment, unknown>
 export const UserDetailsFragmentDoc = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -1214,14 +1274,31 @@ export const ArticlesForAdminDocument = /*#__PURE__*/ {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'published' } },
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'articlesDetails' },
+                },
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'articlesDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Article' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'published' } },
         ],
       },
     },
@@ -1230,6 +1307,129 @@ export const ArticlesForAdminDocument = /*#__PURE__*/ {
   ArticlesForAdminQuery,
   ArticlesForAdminQueryVariables
 >
+export const MyArticlesDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'myArticles' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'skip' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'take' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'ArticleOrderByWithRelationInput',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'where' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ArticleWhereInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myArticles' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'skip' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'skip' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'take' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'take' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'orderBy' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'orderBy' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'where' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'where' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'articlesDetails' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'articlesDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Article' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'tags' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'published' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<MyArticlesQuery, MyArticlesQueryVariables>
 export const UserDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -1817,13 +2017,13 @@ export const ReportersDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<ReportersQuery, ReportersQueryVariables>
-export const UpdateArticleAdminDocument = /*#__PURE__*/ {
+export const UpdateArticleDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'updateArticleAdmin' },
+      name: { kind: 'Name', value: 'updateArticle' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -1845,7 +2045,7 @@ export const UpdateArticleAdminDocument = /*#__PURE__*/ {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'updateArticleAdmin' },
+            name: { kind: 'Name', value: 'updateArticle' },
             arguments: [
               {
                 kind: 'Argument',
@@ -1868,8 +2068,8 @@ export const UpdateArticleAdminDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<
-  UpdateArticleAdminMutation,
-  UpdateArticleAdminMutationVariables
+  UpdateArticleMutation,
+  UpdateArticleMutationVariables
 >
 export const CreateReporterDocument = /*#__PURE__*/ {
   kind: 'Document',
