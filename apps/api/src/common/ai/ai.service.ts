@@ -11,7 +11,7 @@ import { Article } from 'src/models/articles/graphql/entity/article.entity'
 import OpenAI from 'openai'
 import { ChatCompletionMessageParam } from 'openai/resources'
 import { INDEX_NAME } from './constants'
-import { FeedbackType, User } from '@prisma/client'
+import { FeedbackType } from '@prisma/client'
 
 const MAX_TOKEN_LIMIT = 1600
 @Injectable()
@@ -28,13 +28,6 @@ export class AIService {
     })
 
     this.pineconeIndex = pinecone.Index(INDEX_NAME)
-  }
-
-  createEmbedding(content: string) {
-    return this.openAI.embeddings.create({
-      input: content,
-      model: 'text-embedding-ada-002',
-    })
   }
 
   async giveFeedback({
@@ -112,32 +105,6 @@ export class AIService {
     ])
   }
 
-  private getAdjustmentScale(type: FeedbackType): number {
-    switch (type) {
-      case FeedbackType.LOVE:
-        return 0.3
-      case FeedbackType.LIKE:
-        return 0.1
-      case FeedbackType.DISLIKE:
-        return -0.1
-      case FeedbackType.HATE:
-        return -0.3
-      default:
-        return 0
-    }
-  }
-
-  private calculateNewVector(
-    userVector: number[],
-    articleVector: number[],
-    scale: number,
-  ): number[] {
-    // Move user vector towards or away from the article vector based on feedback scale.
-    return userVector.map(
-      (value, index) => value + scale * (articleVector[index] - value),
-    )
-  }
-
   async addRecord({
     id,
     body,
@@ -194,16 +161,6 @@ export class AIService {
         })),
         question,
       )
-      //   const messages: ChatCompletionMessageParam[] = queryResponse.matches.map(
-      //     (match) => ({
-      //       content: `${match.metadata.title} ${match.metadata.body}`,
-      //       role: 'system',
-      //     }),
-      //   )
-
-      //   messages.push({ content: question, role: 'user' })
-
-      //   console.log('messages: ', messages)
 
       const chatCompletion = await this.openAI.chat.completions.create({
         messages,
@@ -223,14 +180,24 @@ export class AIService {
   /**
    * Utils
    */
-  constructChatMessages = (
+  private constructChatMessages = (
     articles: { title: RecordMetadataValue; body: RecordMetadataValue }[],
     userQuestion: string,
   ): ChatCompletionMessageParam[] => {
     const messages: ChatCompletionMessageParam[] = []
 
     // Add the user's question first.
-    messages.push({ content: userQuestion, role: 'user' })
+    messages.push({
+      content:
+        'You are a helpful assistant who summarizes the news given below. If the below records do not have the information the user asking for, you have to start the answer saying the `editor in cheif` database does not have information about it but i help you from my knowledge.',
+      role: 'system',
+    })
+
+    messages.push({
+      content:
+        'You are a helpful assistant. When providing information, first summarize from the news articles given below. If a users query is about information not contained in the articles, begin your response with "The editor-in-chief database does not contain specific details on this topic, but based on my knowledge, ..." and then provide a helpful summary from what you know.',
+      role: 'system',
+    })
 
     let currentTokenCount = this.estimateTokenCount(userQuestion)
 
@@ -256,10 +223,34 @@ export class AIService {
       currentTokenCount += articleTokenCount
     }
 
+    messages.push({ content: userQuestion, role: 'user' })
+
     return messages
   }
 
-  estimateTokenCount(text: string): number {
+  private estimateTokenCount(text: string): number {
     return text.split(/\s+/).length
+  }
+
+  private createEmbedding(content: string) {
+    return this.openAI.embeddings.create({
+      input: content,
+      model: 'text-embedding-ada-002',
+    })
+  }
+
+  private getAdjustmentScale(type: FeedbackType): number {
+    switch (type) {
+      case FeedbackType.LOVE:
+        return 0.3
+      case FeedbackType.LIKE:
+        return 0.1
+      case FeedbackType.DISLIKE:
+        return -0.1
+      case FeedbackType.HATE:
+        return -0.3
+      default:
+        return 0
+    }
   }
 }

@@ -35,8 +35,11 @@ export const ArticleCard = ({
           ))}
         </div>
       </Link>
-      <Badge variant={'default'}>{score}</Badge>
       <ReactionPanelAsync articleId={article.id} className="mt-2" />
+      <div className="mt-1 text-xs text-gray-500">
+        Current relevance{' '}
+        <span className="font-semibold">{score.toPrecision(2)}</span>
+      </div>
     </div>
   )
 }

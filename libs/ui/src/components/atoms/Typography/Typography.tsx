@@ -8,7 +8,7 @@ type TextType = {
 
 export const Title = ({ children, className }: TextType) => {
   return (
-    <div className={cn('text-xl font-semibold capitalize', className)}>
+    <div className={cn('text-xl font-semibold capitalize mb-2', className)}>
       {children}
     </div>
   )
@@ -16,14 +16,14 @@ export const Title = ({ children, className }: TextType) => {
 
 export const Title2 = ({ children, className }: TextType) => {
   return (
-    <div className={cn('text-lg font-semibold capitalize mb-1', className)}>
+    <div className={cn('text-lg font-semibold capitalize mb-2', className)}>
       {children}
     </div>
   )
 }
 export const Title3 = ({ children, className }: TextType) => {
   return (
-    <div className={cn('font-semibold capitalize mb-1', className)}>
+    <div className={cn('font-semibold capitalize mb-2', className)}>
       {children}
     </div>
   )

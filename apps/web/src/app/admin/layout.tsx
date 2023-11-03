@@ -33,7 +33,7 @@ export default async function EmployerLayout({
   }
 
   return (
-    <div className="flex mt-2 bg-gray-50">
+    <div className="flex">
       <div className="hidden w-full max-w-xs sm:block">
         <AdminMenu />
       </div>
@@ -44,7 +44,9 @@ export default async function EmployerLayout({
             <AdminMenu />
           </UserSidebar>
         </div>
-        {children}
+        <div className="bg-white min-h-[calc(100vh-8rem)] py-2 px-4">
+          {children}
+        </div>
       </div>
     </div>
   )

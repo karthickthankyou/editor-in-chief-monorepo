@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { AIChat } from '@eic/ui/src/components/organisms/AIChat'
 import { Inter } from 'next/font/google'
 import { Toaster } from '@eic/ui/src/components/molecules/Toaster'
+import { Footer } from '@eic/ui/src/components/organisms/Footer'
 
 import '@eic/ui/src/index.css'
 
@@ -9,6 +10,7 @@ import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { Container } from '@eic/ui/src/components/atoms/container'
 import { Navbar } from '@eic/ui/src/components/molecules/Navbar'
 import { Button } from '@eic/ui/src/components/atoms/button'
+import { cn } from '@eic/ui/src/utils'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -23,10 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, 'bg-gray-100')}>
         <AuthProvider>
+          <Navbar />
           <Container>
-            <Navbar />
             <div className="py-1" />
             {children}
             <Toaster />
@@ -35,6 +37,7 @@ export default function RootLayout({
               <AIChat />
             </div>
           </Container>
+          <Footer />
         </AuthProvider>
       </body>
     </html>

@@ -20,8 +20,16 @@ export const AIChat = () => {
 
   useEffect(() => {})
   return (
-    <SimpleDialog buttonText="AI" buttonVariant="default">
-      <Title3 className="mt-4">Talk with your personal editor in chief.</Title3>
+    <SimpleDialog
+      buttonText={
+        <div className="p-1 border-2 border-black rounded animate-in bg-white/10 backdrop-blur backdrop-filter">
+          <Bot />
+        </div>
+      }
+    >
+      <Title3 className="flex items-center gap-2 mt-4">
+        <Bot /> Ask anything.
+      </Title3>
       <div className="mt-6 space-y-6">
         {question && (
           <>
@@ -29,12 +37,12 @@ export const AIChat = () => {
               {question}
             </ChatItem>
             <ChatItem loading={!!question && !answer} Icon={Bot}>
-              {answer}
+              <div className="whitespace-pre-wrap">{answer}</div>
             </ChatItem>
           </>
         )}
       </div>
-      <div className="sticky bottom-0 flex flex-col p-1 bg-white/50 backdrop-blur backdrop-filter">
+      <div className="sticky bottom-0 flex flex-col gap-2 p-1 bg-white/50 backdrop-blur backdrop-filter">
         {answer ? (
           <Button
             variant={'ghost'}

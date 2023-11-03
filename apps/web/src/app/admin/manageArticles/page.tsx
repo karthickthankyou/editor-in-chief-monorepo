@@ -9,7 +9,7 @@ export default async function ManageArticles() {
   return (
     <div>
       <div>Manage Articles</div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-8">
         {data?.articlesForAdmin.map((article) => (
           <div key={article.id}>
             <ArticleCardSimple article={article} />

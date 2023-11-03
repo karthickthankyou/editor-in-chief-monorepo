@@ -45,7 +45,7 @@ export const NewArticleContent = () => {
           }
           console.log('data', data)
         })}
-        className="flex flex-col my-4"
+        className="flex flex-col"
       >
         <DialogMessage open={open} setOpen={setOpen}>
           {message}

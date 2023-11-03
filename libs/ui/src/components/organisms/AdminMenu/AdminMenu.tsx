@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '../../molecules/CustomLink/CustomLink'
 
 export interface IAdminMenuProps {}
 

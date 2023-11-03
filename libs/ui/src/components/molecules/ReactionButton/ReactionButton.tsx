@@ -20,7 +20,7 @@ export const ReactionButton = ({
   return (
     <Button
       size={'icon'}
-      variant={'outline'}
+      variant={'ghost'}
       onClick={async () => {
         setLoading(true)
         await onClick()

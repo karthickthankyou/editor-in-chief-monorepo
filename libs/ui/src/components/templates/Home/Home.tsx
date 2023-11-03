@@ -7,7 +7,7 @@ export interface IHomeProps {
 
 export const Home = ({ articles }: IHomeProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {articles.map((article) => (
         <ArticleCard key={article.score} relatedArticle={article} />
       ))}

@@ -1,3 +1,3 @@
 export default function ReporterPage() {
-  return <div>Reporter</div>
+  return <div className="">Reporter</div>
 }
