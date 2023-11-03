@@ -6,7 +6,7 @@ import {
 import { useFormContext, Controller } from '@eic/forms/util'
 import { Label } from '../../atoms/Label'
 import { Input } from '../../atoms/Input'
-import { Textarea } from '../../atoms/TextArea/TextArea'
+import { TextArea } from '../../atoms/TextArea/TextArea'
 import { Button } from '../../atoms/button'
 import { SelectTags } from '../../molecules/SelectTags'
 import { createArticle } from '@eic/common/src/actions/createArticle'
@@ -55,7 +55,7 @@ export const NewArticleContent = () => {
           <Input {...register('title')} placeholder="Title" />
         </Label>
         <Label title="Body">
-          <Textarea {...register('body')} placeholder="Body" />
+          <TextArea {...register('body')} placeholder="Body" />
         </Label>
 
         <Label title="Published">

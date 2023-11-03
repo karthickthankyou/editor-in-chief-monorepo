@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { TellThem } from './TellThem'
 
 const meta: Meta<typeof TellThem> = {
-  title: 'src/components/molecules/TellThem/TellThem',
+  title: 'molecules/TellThem',
   component: TellThem,
   tags: ['autodocs'],
 }

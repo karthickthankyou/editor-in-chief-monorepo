@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { AIChat } from './AIChat'
 
 const meta: Meta<typeof AIChat> = {
-  title: 'src/components/organisms/AIChat/AIChat',
+  title: 'organisms/AIChat',
   component: AIChat,
   tags: ['autodocs'],
 }

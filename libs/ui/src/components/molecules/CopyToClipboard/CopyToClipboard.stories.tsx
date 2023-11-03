@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { CopyToClipboard } from './CopyToClipboard'
 
 const meta: Meta<typeof CopyToClipboard> = {
-  title: 'src/components/molecules/CopyToClipboard/CopyToClipboard',
+  title: 'molecules/CopyToClipboard',
   component: CopyToClipboard,
   tags: ['autodocs'],
 }

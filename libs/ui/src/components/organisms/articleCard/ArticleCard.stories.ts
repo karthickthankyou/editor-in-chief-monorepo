@@ -13,12 +13,15 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   args: {
-    article: {
-      body: 'Hey body',
-      createdAt: new Date().toISOString(),
-      id: 1,
-      title: ' This is a title',
-      tags: ['tag1', 'tag2'],
+    relatedArticle: {
+      article: {
+        body: 'Hey body',
+        createdAt: new Date().toISOString(),
+        id: 1,
+        title: ' This is a title',
+        tags: ['tag1', 'tag2'],
+      },
+      score: 0.7,
     },
   },
 }

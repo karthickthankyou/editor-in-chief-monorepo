@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { CreateAdmin } from './CreateAdmin'
 
 const meta: Meta<typeof CreateAdmin> = {
-  title: 'src/components/organisms/CreateAdmin/CreateAdmin',
+  title: 'organisms/CreateAdmin',
   component: CreateAdmin,
   tags: ['autodocs'],
 }

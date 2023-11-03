@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ArticlePage } from './ArticlePage'
 
 const meta: Meta<typeof ArticlePage> = {
-  title: 'templates/ArticlePage/ArticlePage',
+  title: 'templates/ArticlePage',
   component: ArticlePage,
   tags: ['autodocs'],
 }

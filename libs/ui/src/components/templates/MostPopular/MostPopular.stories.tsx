@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { MostPopular } from './MostPopular'
 
 const meta: Meta<typeof MostPopular> = {
-  title: 'templates/MostPopular/MostPopular',
+  title: 'templates/MostPopular',
   component: MostPopular,
   tags: ['autodocs'],
 }

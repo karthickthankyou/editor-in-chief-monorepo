@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Toaster } from './Toaster'
 
 const meta: Meta<typeof Toaster> = {
-  title: 'src/components/molecules/Toaster/Toaster',
+  title: 'molecules/Toaster',
   component: Toaster,
   tags: ['autodocs'],
 }

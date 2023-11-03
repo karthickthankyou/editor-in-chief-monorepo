@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { DeveloperInfo } from './DeveloperInfo'
 
 const meta: Meta<typeof DeveloperInfo> = {
-  title: 'atoms/DeveloperInfo/DeveloperInfo',
+  title: 'atoms/DeveloperInfo',
   component: DeveloperInfo,
   tags: ['autodocs'],
 }

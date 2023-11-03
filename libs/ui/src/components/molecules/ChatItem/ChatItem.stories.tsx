@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ChatItem } from './ChatItem'
 
 const meta: Meta<typeof ChatItem> = {
-  title: 'src/components/molecules/ChatItem/ChatItem',
+  title: 'molecules/ChatItem',
   component: ChatItem,
   tags: ['autodocs'],
 }

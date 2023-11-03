@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { SimpleDialog } from './SimpleDialog'
 
 const meta: Meta<typeof SimpleDialog> = {
-  title: 'src/components/molecules/SimpleDialog/SimpleDialog',
+  title: 'molecules/SimpleDialog',
   component: SimpleDialog,
   tags: ['autodocs'],
 }

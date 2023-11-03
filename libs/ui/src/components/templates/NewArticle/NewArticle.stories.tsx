@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { NewArticle } from './NewArticle'
 
 const meta: Meta<typeof NewArticle> = {
-  title: 'src/components/templates/NewArticle/NewArticle',
+  title: 'templates/NewArticle',
   component: NewArticle,
   tags: ['autodocs'],
 }

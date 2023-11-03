@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { AdminMenu } from './AdminMenu'
 
 const meta: Meta<typeof AdminMenu> = {
-  title: 'src/components/organisms/AdminMenu/AdminMenu',
+  title: 'organisms/AdminMenu',
   component: AdminMenu,
   tags: ['autodocs'],
 }

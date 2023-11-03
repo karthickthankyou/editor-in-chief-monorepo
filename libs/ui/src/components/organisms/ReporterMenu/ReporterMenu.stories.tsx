@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { ReporterMenu } from './ReporterMenu'
 
 const meta: Meta<typeof ReporterMenu> = {
-  title: 'src/components/organisms/ReporterMenu/ReporterMenu',
+  title: 'organisms/ReporterMenu',
   component: ReporterMenu,
   tags: ['autodocs'],
 }
