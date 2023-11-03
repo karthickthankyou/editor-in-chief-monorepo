@@ -51,31 +51,32 @@ export const AIChat = () => {
               setAnswer('')
             }}
           >
-            Clear
+            Ask
           </Button>
-        ) : null}
-        <form
-          onSubmit={handleSubmit(async ({ query }) => {
-            console.log('data', query)
-            setQuestion(query)
-            reset()
-            const data = await fetchGraphQLGetJwt({
-              document: QuestionAiDocument,
-              variables: { query },
-            })
-            console.log('data', data.data?.questionAI)
-            setAnswer(data.data?.questionAI || 'No answers. 😕')
-          })}
-          className="flex gap-2"
-        >
-          <Input
-            placeholder="Talk..."
-            className="text-lg"
-            {...register('query')}
-            disabled={Boolean(answer)}
-          />
-          <Button disabled={Boolean(answer)}>Send</Button>
-        </form>
+        ) : (
+          <form
+            onSubmit={handleSubmit(async ({ query }) => {
+              console.log('data', query)
+              setQuestion(query)
+              reset()
+              const data = await fetchGraphQLGetJwt({
+                document: QuestionAiDocument,
+                variables: { query },
+              })
+              console.log('data', data.data?.questionAI)
+              setAnswer(data.data?.questionAI || 'No answers. 😕')
+            })}
+            className="flex gap-2"
+          >
+            <Input
+              placeholder="Talk..."
+              className="text-lg"
+              {...register('query')}
+              disabled={Boolean(answer)}
+            />
+            <Button disabled={Boolean(answer)}>Send</Button>
+          </form>
+        )}
       </div>
     </SimpleDialog>
   )

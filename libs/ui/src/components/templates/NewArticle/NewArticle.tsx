@@ -1,9 +1,6 @@
 'use client'
-import {
-  FormProviderCreateArticle,
-  FormTypeCreateArticle,
-} from '@eic/forms/createArticle'
-import { useFormContext, Controller } from '@eic/forms/util'
+import { useFormCreateArticle } from '@eic/forms/createArticle'
+import { Controller } from '@eic/forms/util'
 import { Label } from '../../atoms/Label'
 import { Input } from '../../atoms/Input'
 import { TextArea } from '../../atoms/TextArea/TextArea'
@@ -17,16 +14,8 @@ import { DialogMessage } from '../../molecules/SimpleDialog/DialogMessage'
 export interface INewArticleProps {}
 
 export const NewArticle = () => {
-  return (
-    <FormProviderCreateArticle>
-      <NewArticleContent />
-    </FormProviderCreateArticle>
-  )
-}
-
-export const NewArticleContent = () => {
   const { register, handleSubmit, reset, setValue, control } =
-    useFormContext<FormTypeCreateArticle>()
+    useFormCreateArticle()
   const [open, setOpen] = useState(false)
   const [message, setMesage] = useState('')
 

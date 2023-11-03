@@ -152,6 +152,17 @@ export type ArticleWithScore = {
   score: Scalars['Float']['output']
 }
 
+export type AuthProvider = {
+  __typename?: 'AuthProvider'
+  type: AuthProviderType
+  uid: Scalars['String']['output']
+}
+
+export enum AuthProviderType {
+  Credentials = 'CREDENTIALS',
+  Google = 'GOOGLE',
+}
+
 export type BoolFilter = {
   equals?: InputMaybe<Scalars['Boolean']['input']>
   not?: InputMaybe<Scalars['Boolean']['input']>
@@ -184,10 +195,27 @@ export type CreateReporterInput = {
   uid: Scalars['String']['input']
 }
 
-export type CreateUserInput = {
+export type CreateUserWithCredentialsInput = {
+  email: Scalars['String']['input']
   image?: InputMaybe<Scalars['String']['input']>
   name: Scalars['String']['input']
+  password: Scalars['String']['input']
+}
+
+export type CreateUserWithProviderInput = {
+  image?: InputMaybe<Scalars['String']['input']>
+  name: Scalars['String']['input']
+  type: AuthProviderType
   uid: Scalars['String']['input']
+}
+
+export type Credential = {
+  __typename?: 'Credential'
+  createdAt: Scalars['DateTime']['output']
+  email: Scalars['String']['output']
+  passwordHash: Scalars['String']['output']
+  uid: Scalars['String']['output']
+  updatedAt: Scalars['DateTime']['output']
 }
 
 export type DateTimeFilter = {
@@ -294,7 +322,8 @@ export type Mutation = {
   createFeedback: Feedback
   createRead: Read
   createReporter: Reporter
-  createUser: User
+  createUserWithCredentials: User
+  createUserWithProvider: User
   giveMyFeedback: Feedback
   removeAdmin: Admin
   removeArticle: Article
@@ -330,8 +359,12 @@ export type MutationCreateReporterArgs = {
   createReporterInput: CreateReporterInput
 }
 
-export type MutationCreateUserArgs = {
-  createUserInput: CreateUserInput
+export type MutationCreateUserWithCredentialsArgs = {
+  createUserWithCredentialsInput: CreateUserWithCredentialsInput
+}
+
+export type MutationCreateUserWithProviderArgs = {
+  createUserWithProviderInput: CreateUserWithProviderInput
 }
 
 export type MutationGiveMyFeedbackArgs = {
@@ -398,6 +431,8 @@ export type Query = {
   articlesForAdmin: Array<Article>
   feedback?: Maybe<Feedback>
   feedbacks: Array<Feedback>
+  getAuthProvider?: Maybe<AuthProvider>
+  getCredentials?: Maybe<Credential>
   myArticles: Array<Article>
   myFeedback?: Maybe<Feedback>
   questionAI: Scalars['String']['output']
@@ -405,7 +440,7 @@ export type Query = {
   reads: Array<Read>
   relatedArticles: Array<ArticleWithScore>
   reporter: Reporter
-  reporterMe: Reporter
+  reporterMe?: Maybe<Reporter>
   reporters: Array<Reporter>
   user: User
   users: Array<User>
@@ -457,6 +492,14 @@ export type QueryFeedbacksArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>
   take?: InputMaybe<Scalars['Int']['input']>
   where?: InputMaybe<FeedbackWhereInput>
+}
+
+export type QueryGetAuthProviderArgs = {
+  uid: Scalars['String']['input']
+}
+
+export type QueryGetCredentialsArgs = {
+  email: Scalars['String']['input']
 }
 
 export type QueryMyArticlesArgs = {
@@ -831,13 +874,22 @@ export type UserQuery = {
   }
 }
 
-export type CreateUserMutationVariables = Exact<{
-  createUserInput: CreateUserInput
+export type CreateUserWithCredentialsMutationVariables = Exact<{
+  createUserWithCredentialsInput: CreateUserWithCredentialsInput
 }>
 
-export type CreateUserMutation = {
+export type CreateUserWithCredentialsMutation = {
   __typename?: 'Mutation'
-  createUser: { __typename?: 'User'; uid: string }
+  createUserWithCredentials: { __typename?: 'User'; uid: string }
+}
+
+export type CreateUserWithProviderMutationVariables = Exact<{
+  createUserWithProviderInput: CreateUserWithProviderInput
+}>
+
+export type CreateUserWithProviderMutation = {
+  __typename?: 'Mutation'
+  createUserWithProvider: { __typename?: 'User'; uid: string }
 }
 
 export type ArticleQueryVariables = Exact<{
@@ -917,7 +969,7 @@ export type ReporterMeQueryVariables = Exact<{ [key: string]: never }>
 
 export type ReporterMeQuery = {
   __typename?: 'Query'
-  reporterMe: {
+  reporterMe?: {
     __typename?: 'Reporter'
     user: {
       __typename?: 'User'
@@ -925,7 +977,7 @@ export type ReporterMeQuery = {
       name: string
       uid: string
     }
-  }
+  } | null
 }
 
 export type AdminMeQueryVariables = Exact<{ [key: string]: never }>
@@ -1035,6 +1087,33 @@ export type QuestionAiQueryVariables = Exact<{
 
 export type QuestionAiQuery = { __typename?: 'Query'; questionAI: string }
 
+export type GetCredentialsQueryVariables = Exact<{
+  email: Scalars['String']['input']
+}>
+
+export type GetCredentialsQuery = {
+  __typename?: 'Query'
+  getCredentials?: {
+    __typename?: 'Credential'
+    uid: string
+    email: string
+    passwordHash: string
+  } | null
+}
+
+export type GetAuthProviderQueryVariables = Exact<{
+  uid: Scalars['String']['input']
+}>
+
+export type GetAuthProviderQuery = {
+  __typename?: 'Query'
+  getAuthProvider?: {
+    __typename?: 'AuthProvider'
+    uid: string
+    type: AuthProviderType
+  } | null
+}
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
@@ -1050,9 +1129,12 @@ export const namedOperations = {
     reporters: 'reporters',
     relatedArticles: 'relatedArticles',
     questionAI: 'questionAI',
+    getCredentials: 'getCredentials',
+    GetAuthProvider: 'GetAuthProvider',
   },
   Mutation: {
-    CreateUser: 'CreateUser',
+    createUserWithCredentials: 'createUserWithCredentials',
+    CreateUserWithProvider: 'CreateUserWithProvider',
     giveMyFeedback: 'giveMyFeedback',
     updateArticle: 'updateArticle',
     createReporter: 'createReporter',
@@ -1515,25 +1597,25 @@ export const UserDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<UserQuery, UserQueryVariables>
-export const CreateUserDocument = /*#__PURE__*/ {
+export const CreateUserWithCredentialsDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'mutation',
-      name: { kind: 'Name', value: 'CreateUser' },
+      name: { kind: 'Name', value: 'createUserWithCredentials' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'createUserInput' },
+            name: { kind: 'Name', value: 'createUserWithCredentialsInput' },
           },
           type: {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateUserInput' },
+              name: { kind: 'Name', value: 'CreateUserWithCredentialsInput' },
             },
           },
         },
@@ -1543,14 +1625,17 @@ export const CreateUserDocument = /*#__PURE__*/ {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'createUser' },
+            name: { kind: 'Name', value: 'createUserWithCredentials' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'createUserInput' },
+                name: { kind: 'Name', value: 'createUserWithCredentialsInput' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'createUserInput' },
+                  name: {
+                    kind: 'Name',
+                    value: 'createUserWithCredentialsInput',
+                  },
                 },
               },
             ],
@@ -1565,7 +1650,64 @@ export const CreateUserDocument = /*#__PURE__*/ {
       },
     },
   ],
-} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>
+} as unknown as DocumentNode<
+  CreateUserWithCredentialsMutation,
+  CreateUserWithCredentialsMutationVariables
+>
+export const CreateUserWithProviderDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateUserWithProvider' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'createUserWithProviderInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateUserWithProviderInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createUserWithProvider' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'createUserWithProviderInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'createUserWithProviderInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateUserWithProviderMutation,
+  CreateUserWithProviderMutationVariables
+>
 export const ArticleDocument = /*#__PURE__*/ {
   kind: 'Document',
   definitions: [
@@ -2353,3 +2495,111 @@ export const QuestionAiDocument = /*#__PURE__*/ {
     },
   ],
 } as unknown as DocumentNode<QuestionAiQuery, QuestionAiQueryVariables>
+export const GetCredentialsDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'getCredentials' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getCredentials' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'passwordHash' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetCredentialsQuery, GetCredentialsQueryVariables>
+export const GetAuthProviderDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAuthProvider' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'uid' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'getAuthProvider' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'uid' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'uid' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAuthProviderQuery,
+  GetAuthProviderQueryVariables
+>

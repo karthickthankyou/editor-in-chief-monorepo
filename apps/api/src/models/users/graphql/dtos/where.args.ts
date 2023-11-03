@@ -17,7 +17,11 @@ export class UserWhereUniqueInput {
 
 @InputType()
 export class UserWhereInputStrict
-  implements RestrictProperties<UserWhereInputStrict, Prisma.UserWhereInput>
+  implements
+    RestrictProperties<
+      UserWhereInputStrict,
+      Omit<Prisma.UserWhereInput, 'credentials' | 'authProvider'>
+    >
 {
   admin: AdminRelationFilter
   uid: StringFilter

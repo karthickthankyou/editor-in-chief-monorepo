@@ -55,6 +55,24 @@ type Read {
   article: Article!
 }
 
+type Credential {
+  uid: String!
+  email: String!
+  passwordHash: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type AuthProvider {
+  type: AuthProviderType!
+  uid: String!
+}
+
+enum AuthProviderType {
+  GOOGLE
+  CREDENTIALS
+}
+
 type Article {
   id: Int!
   createdAt: DateTime!
@@ -86,11 +104,13 @@ type Query {
   admin(where: AdminWhereUniqueInput): Admin!
   adminMe: Admin!
   articlesForAdmin(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
+  getCredentials(email: String!): Credential
+  getAuthProvider(uid: String!): AuthProvider
   users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput): User!
   reporters(distinct: [ReporterScalarFieldEnum!], where: ReporterWhereInput, orderBy: [ReporterOrderByWithRelationInput!], cursor: ReporterWhereUniqueInput, take: Int, skip: Int): [Reporter!]!
   reporter(where: ReporterWhereUniqueInput): Reporter!
-  reporterMe: Reporter!
+  reporterMe: Reporter
   questionAI(query: String!): String!
   articles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
   myArticles(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
@@ -442,7 +462,8 @@ type Mutation {
   createAdmin(createAdminInput: CreateAdminInput!): Admin!
   updateAdmin(updateAdminInput: UpdateAdminInput!): Admin!
   removeAdmin(where: AdminWhereUniqueInput): Admin!
-  createUser(createUserInput: CreateUserInput!): User!
+  createUserWithProvider(createUserWithProviderInput: CreateUserWithProviderInput!): User!
+  createUserWithCredentials(createUserWithCredentialsInput: CreateUserWithCredentialsInput!): User!
   updateUser(updateUserInput: UpdateUserInput!): User!
   removeUser(where: UserWhereUniqueInput): User!
   createReporter(createReporterInput: CreateReporterInput!): Reporter!
@@ -468,10 +489,18 @@ input UpdateAdminInput {
   uid: String!
 }
 
-input CreateUserInput {
+input CreateUserWithProviderInput {
   image: String
   uid: String!
   name: String!
+  type: AuthProviderType!
+}
+
+input CreateUserWithCredentialsInput {
+  name: String!
+  email: String!
+  password: String!
+  image: String
 }
 
 input UpdateUserInput {

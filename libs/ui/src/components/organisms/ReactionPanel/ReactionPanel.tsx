@@ -3,7 +3,7 @@
 import { giveMyFeedback } from '@eic/common/src/actions/giveMyFeedback'
 import { cn } from '../../../utils'
 import { ReactionButton } from '../../molecules/ReactionButton'
-import { SmilePlus, Smile, Angry, Frown } from 'lucide-react'
+import { SmilePlus, Smile, Angry, Frown, LucideIcon } from 'lucide-react'
 
 import { FeedbackQuery, FeedbackType } from '@eic/network/src/generated'
 
@@ -12,6 +12,18 @@ export interface IReactionPanelProps {
   feedback?: FeedbackQuery['feedback']
   articleId: number
 }
+
+type FeedbackOption = {
+  type: FeedbackType
+  Icon: LucideIcon
+}
+
+const feedbackOptions: FeedbackOption[] = [
+  { type: FeedbackType.Love, Icon: SmilePlus },
+  { type: FeedbackType.Like, Icon: Smile },
+  { type: FeedbackType.Dislike, Icon: Frown },
+  { type: FeedbackType.Hate, Icon: Angry },
+]
 
 export const ReactionPanel = ({
   className,
@@ -24,16 +36,20 @@ export const ReactionPanel = ({
 
   return (
     <div className={cn(`flex gap-2 mt-2`, className)}>
-      <ReactionButton
-        Icon={SmilePlus}
-        onClick={() => {
-          giveMyFeedback({
-            articleId,
-            type: FeedbackType.Love,
-          })
-        }}
-        selected={feedback?.type === FeedbackType.Love}
-      />
+      {feedbackOptions.map((reaction) => (
+        <ReactionButton
+          Icon={reaction.Icon}
+          key={reaction.type}
+          onClick={async () => {
+            await giveMyFeedback({
+              articleId,
+              type: reaction.type,
+            })
+          }}
+          selected={feedback?.type === reaction.type}
+        />
+      ))}
+      {/*
       <ReactionButton
         Icon={Smile}
         onClick={() => {
@@ -63,7 +79,7 @@ export const ReactionPanel = ({
           })
         }}
         selected={feedback?.type === FeedbackType.Hate}
-      />
+      /> */}
     </div>
   )
 }

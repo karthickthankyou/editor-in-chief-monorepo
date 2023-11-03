@@ -13,28 +13,29 @@ export const ArticleCard = ({
 }) => {
   const { article, score } = relatedArticle
   return (
-    <div className={cn(fontMerriweatherSans300, 'group')}>
+    <div className={cn(fontMerriweatherSans300)}>
       <Link href={`/article/${article.id}`}>
         <div
           className={cn(
-            'text-lg font-medium group-hover:underline underline-offset-4 ',
+            'text-lg font-medium hover:underline underline-offset-4 ',
             fontMerriweather700,
           )}
         >
           {article.title}
         </div>
-        <div className="max-w-md mt-1 text-sm gray-500 line-clamp-2">
-          {article.body}
-        </div>
-        <DisplayDate dateString={article.createdAt} className="mt-2" />
-        <div className="flex flex-wrap gap-2 mt-2">
-          {article.tags.map((tag) => (
-            <Badge key={tag} variant={'outline'}>
-              {tag}
-            </Badge>
-          ))}
-        </div>
       </Link>
+      <div className="max-w-md mt-1 text-sm gray-500 line-clamp-2">
+        {article.body}
+      </div>
+      <DisplayDate dateString={article.createdAt} className="mt-2" />
+      <div className="flex flex-wrap gap-2 mt-2">
+        {article.tags.map((tag) => (
+          <Badge key={tag} variant={'outline'}>
+            {tag}
+          </Badge>
+        ))}
+      </div>
+
       <ReactionPanelAsync articleId={article.id} className="mt-2" />
       <div className="mt-1 text-xs text-gray-500">
         Current relevance{' '}

@@ -32,6 +32,7 @@ export async function giveMyFeedback(input: CreateFeedbackType) {
 
     if (data?.giveMyFeedback) {
       revalidateTag(namedOperations.Query.MyFeedback)
+      revalidateTag(namedOperations.Query.feedback)
       return data
     }
   } else {

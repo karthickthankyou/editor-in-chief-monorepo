@@ -53,8 +53,22 @@ query User($where: UserWhereUniqueInput) {
   }
 }
 
-mutation CreateUser($createUserInput: CreateUserInput!) {
-  createUser(createUserInput: $createUserInput) {
+mutation createUserWithCredentials(
+  $createUserWithCredentialsInput: CreateUserWithCredentialsInput!
+) {
+  createUserWithCredentials(
+    createUserWithCredentialsInput: $createUserWithCredentialsInput
+  ) {
+    uid
+  }
+}
+
+mutation CreateUserWithProvider(
+  $createUserWithProviderInput: CreateUserWithProviderInput!
+) {
+  createUserWithProvider(
+    createUserWithProviderInput: $createUserWithProviderInput
+  ) {
     uid
   }
 }
@@ -179,4 +193,19 @@ query relatedArticles {
 
 query questionAI($query: String!) {
   questionAI(query: $query)
+}
+
+query getCredentials($email: String!) {
+  getCredentials(email: $email) {
+    uid
+    email
+    passwordHash
+  }
+}
+
+query GetAuthProvider($uid: String!) {
+  getAuthProvider(uid: $uid) {
+    uid
+    type
+  }
 }

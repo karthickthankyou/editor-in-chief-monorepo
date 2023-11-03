@@ -75,9 +75,15 @@ export class AIService {
   }: {
     uid: string
   }): Promise<{ id: string; score: number }[]> {
+    console.log('queryRelatedArticles uid ', uid)
     const { records } = await this.pineconeIndex.fetch([uid])
 
     const userRecord = records[uid]
+
+    if (!userRecord?.values) {
+      console.log('userRecord', userRecord)
+      throw new Error('User record not found.')
+    }
 
     const queryResponse = await this.pineconeIndex.query({
       topK: 10,

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CustomLink } from './CustomLink'
+import { Link } from './CustomLink'
 
-const meta: Meta<typeof CustomLink> = {
-  title: 'src/components/molecules/CustomLink/CustomLink',
-  component: CustomLink,
+const meta: Meta<typeof Link> = {
+  title: 'molecules/CustomLink',
+  component: Link,
   tags: ['autodocs'],
 }
 

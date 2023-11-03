@@ -42,7 +42,7 @@ export class ReportersResolver {
   }
 
   @AllowAuthenticated()
-  @Query(() => Reporter, { name: 'reporterMe' })
+  @Query(() => Reporter, { name: 'reporterMe', nullable: true })
   reporterMe(@GetUser() user: GetUserType) {
     return this.prisma.reporter.findUnique({
       where: { uid: user.uid },

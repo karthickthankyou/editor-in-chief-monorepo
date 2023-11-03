@@ -1,18 +1,57 @@
-import { CreateUserDocument, UserDocument } from '@eic/network/src/generated'
+import {
+  AuthProviderType,
+  CreateUserWithProviderDocument,
+  GetAuthProviderDocument,
+  GetCredentialsDocument,
+} from '@eic/network/src/generated'
+import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { NextAuthOptions, getServerSession } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import GoogleProvider from 'next-auth/providers/google'
+import CredentialsProvider from 'next-auth/providers/credentials'
+
 import { fetchGraphQL } from './fetch'
 
 const MAX_AGE = 1 * 24 * 60 * 60
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // Remove the CredentialsProvider block if you don't need it
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+      },
+      async authorize(credentials) {
+        if (!credentials) return null
+
+        const { email, password } = credentials
+
+        const auth = await fetchGraphQL({
+          document: GetCredentialsDocument,
+          variables: { email: email },
+        })
+        if (!auth.data?.getCredentials || auth.error) {
+          return null
+        }
+
+        const passwordValid = bcrypt.compareSync(
+          password,
+          auth.data?.getCredentials.passwordHash,
+        )
+
+        if (auth.data && passwordValid) {
+          const { uid } = auth.data.getCredentials
+          return { id: uid }
+        } else {
+          return null
+        }
+      },
     }),
   ],
   debug: true,
@@ -60,27 +99,35 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async signIn({ user }) {
-      const { id: uid, name, image } = user
+    async signIn({ user, account }) {
+      if (account?.provider === 'google') {
+        //   Create user
+        const { id, name, image } = user
 
-      const existingUser = await fetchGraphQL({
-        document: UserDocument,
-        variables: {
-          where: { uid },
-        },
-      })
-
-      if (!existingUser.data?.user.uid) {
-        const newUser = await fetchGraphQL({
-          document: CreateUserDocument,
+        const existingUser = await fetchGraphQL({
+          document: GetAuthProviderDocument,
           variables: {
-            createUserInput: { uid, image, name: name || '' },
+            uid: id,
           },
-
-          apiSecret: process.env.INTERNAL_API_SECRET,
         })
-        console.log('!!! newUser ', newUser)
+        if (!existingUser.data?.getAuthProvider?.uid) {
+          const newUser = await fetchGraphQL({
+            document: CreateUserWithProviderDocument,
+            variables: {
+              createUserWithProviderInput: {
+                uid: id,
+                type: AuthProviderType.Google,
+                image,
+                name: name || '',
+              },
+            },
+
+            apiSecret: process.env.INTERNAL_API_SECRET,
+          })
+          console.log('!!! newUser ', newUser)
+        }
       }
+
       return true
     },
     async session({ token, session }) {

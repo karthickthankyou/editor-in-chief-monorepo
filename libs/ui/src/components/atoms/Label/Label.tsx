@@ -16,12 +16,12 @@ const Label = React.forwardRef<
 >(({ className, title, children, error, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    className={cn(labelVariants(), 'my-4', className)}
+    className={cn(labelVariants(), 'my-2', className)}
     {...props}
   >
     <div className="mb-2">{title}</div>
     {children}
-    <div className="mt-1 text-red">{error}</div>
+    <div className="mt-2 font-normal text-red-500">{error}</div>
   </LabelPrimitive.Root>
 ))
 Label.displayName = LabelPrimitive.Root.displayName
