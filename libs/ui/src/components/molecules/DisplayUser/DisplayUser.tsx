@@ -12,13 +12,19 @@ export const DisplayUser = () => {
 
   return (
     <div className="flex gap-2">
-      <Image
-        className="w-16 h-16 rounded-full aspect-square"
-        width={600}
-        height={600}
-        src={session?.data?.user?.image || ''}
-        alt={''}
-      />
+      {session?.data?.user?.image ? (
+        <Image
+          className="w-16 h-16 rounded-full aspect-square"
+          width={600}
+          height={600}
+          src={session?.data?.user?.image || ''}
+          alt={''}
+        />
+      ) : (
+        <div className="flex items-center justify-center flex-shrink-0 w-16 h-16 text-3xl font-semibold text-white bg-black border rounded-full">
+          {session?.data?.user?.name?.charAt(0)}
+        </div>
+      )}
       <div>
         <div className={`text-xl font-light ${fontMerriweather}`}>
           {session?.data?.user?.name}

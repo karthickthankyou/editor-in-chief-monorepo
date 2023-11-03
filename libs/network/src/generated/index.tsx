@@ -432,7 +432,7 @@ export type Query = {
   feedback?: Maybe<Feedback>
   feedbacks: Array<Feedback>
   getAuthProvider?: Maybe<AuthProvider>
-  getCredentials?: Maybe<Credential>
+  getCredentials?: Maybe<User>
   myArticles: Array<Article>
   myFeedback?: Maybe<Feedback>
   questionAI: Scalars['String']['output']
@@ -733,6 +733,7 @@ export type UpdateUserInput = {
 export type User = {
   __typename?: 'User'
   createdAt: Scalars['DateTime']['output']
+  credential: Credential
   feedbacks: Array<Feedback>
   image?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
@@ -1094,10 +1095,15 @@ export type GetCredentialsQueryVariables = Exact<{
 export type GetCredentialsQuery = {
   __typename?: 'Query'
   getCredentials?: {
-    __typename?: 'Credential'
+    __typename?: 'User'
     uid: string
-    email: string
-    passwordHash: string
+    name: string
+    image?: string | null
+    credential: {
+      __typename?: 'Credential'
+      email: string
+      passwordHash: string
+    }
   } | null
 }
 
@@ -2538,10 +2544,21 @@ export const GetCredentialsDocument = /*#__PURE__*/ {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'uid' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'image' } },
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'passwordHash' },
+                  name: { kind: 'Name', value: 'credential' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'passwordHash' },
+                      },
+                    ],
+                  },
                 },
               ],
             },

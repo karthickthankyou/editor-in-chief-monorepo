@@ -42,12 +42,18 @@ export const authOptions: NextAuthOptions = {
 
         const passwordValid = bcrypt.compareSync(
           password,
-          auth.data?.getCredentials.passwordHash,
+          auth.data?.getCredentials.credential.passwordHash,
         )
 
         if (auth.data && passwordValid) {
-          const { uid } = auth.data.getCredentials
-          return { id: uid }
+          const {
+            uid,
+            name,
+            image,
+            credential: { email },
+          } = auth.data.getCredentials
+
+          return { id: uid, name, image, email }
         } else {
           return null
         }
@@ -66,6 +72,8 @@ export const authOptions: NextAuthOptions = {
       if (!token) {
         throw new Error('Token is undefined')
       }
+
+      console.log()
 
       const { sub, ...tokenProps } = token
       // Get the current date in seconds since the epoch

@@ -198,8 +198,12 @@ query questionAI($query: String!) {
 query getCredentials($email: String!) {
   getCredentials(email: $email) {
     uid
-    email
-    passwordHash
+    name
+    image
+    credential {
+      email
+      passwordHash
+    }
   }
 }
 

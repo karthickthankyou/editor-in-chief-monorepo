@@ -57,9 +57,9 @@ export class UsersResolver {
     }
   }
 
-  @Query(() => Credential, { name: 'getCredentials', nullable: true })
+  @Query(() => User, { name: 'getCredentials', nullable: true })
   getCredentials(@Args('email') email: string) {
-    return this.prisma.credentials.findUnique({ where: { email } })
+    return this.prisma.user.findFirst({ where: { credentials: { email } } })
   }
 
   @Query(() => AuthProvider, { name: 'getAuthProvider', nullable: true })
@@ -104,6 +104,13 @@ export class UsersResolver {
   @ResolveField(() => [Read])
   reads(@Parent() parent: User) {
     return this.prisma.read.findMany({
+      where: { uid: parent.uid },
+    })
+  }
+
+  @ResolveField(() => Credential)
+  credential(@Parent() parent: User) {
+    return this.prisma.credentials.findUnique({
       where: { uid: parent.uid },
     })
   }

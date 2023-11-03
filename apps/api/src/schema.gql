@@ -11,6 +11,7 @@ type User {
   reporter: Reporter
   feedbacks: [Feedback!]!
   reads: [Read!]!
+  credential: Credential!
 }
 
 """
@@ -104,7 +105,7 @@ type Query {
   admin(where: AdminWhereUniqueInput): Admin!
   adminMe: Admin!
   articlesForAdmin(distinct: [ArticleScalarFieldEnum!], where: ArticleWhereInput, orderBy: [ArticleOrderByWithRelationInput!], cursor: ArticleWhereUniqueInput, take: Int, skip: Int): [Article!]!
-  getCredentials(email: String!): Credential
+  getCredentials(email: String!): User
   getAuthProvider(uid: String!): AuthProvider
   users(distinct: [UserScalarFieldEnum!], where: UserWhereInput, orderBy: [UserOrderByWithRelationInput!], cursor: UserWhereUniqueInput, take: Int, skip: Int): [User!]!
   user(where: UserWhereUniqueInput): User!
