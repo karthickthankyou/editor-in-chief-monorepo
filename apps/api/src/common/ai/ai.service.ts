@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common'
 
-import { Index, Pinecone, RecordMetadata } from '@pinecone-database/pinecone'
+import {
+  Index,
+  Pinecone,
+  RecordMetadata,
+  RecordMetadataValue,
+} from '@pinecone-database/pinecone'
 
 import { Article } from 'src/models/articles/graphql/entity/article.entity'
 import OpenAI from 'openai'
@@ -8,6 +13,7 @@ import { ChatCompletionMessageParam } from 'openai/resources'
 import { INDEX_NAME } from './constants'
 import { FeedbackType, User } from '@prisma/client'
 
+const MAX_TOKEN_LIMIT = 1600
 @Injectable()
 export class AIService {
   private readonly openAI: OpenAI
@@ -180,26 +186,29 @@ export class AIService {
       filter: { type: 'article' },
     })
 
-    console.log(`Found ${queryResponse.matches.length} matches...`)
-    console.log('queryResponse.matches', queryResponse.matches)
-
-    console.log(`Asking question: ${question}...`)
     if (queryResponse.matches.length) {
-      const messages: ChatCompletionMessageParam[] = queryResponse.matches.map(
-        (match) => ({
-          content: `${match.metadata.title} ${match.metadata.body}`,
-          role: 'system',
-        }),
+      const messages: ChatCompletionMessageParam[] = this.constructChatMessages(
+        queryResponse.matches.map(({ metadata }) => ({
+          title: metadata.title,
+          body: metadata.body,
+        })),
+        question,
       )
+      //   const messages: ChatCompletionMessageParam[] = queryResponse.matches.map(
+      //     (match) => ({
+      //       content: `${match.metadata.title} ${match.metadata.body}`,
+      //       role: 'system',
+      //     }),
+      //   )
 
-      messages.push({ content: question, role: 'user' })
+      //   messages.push({ content: question, role: 'user' })
 
-      console.log('messages: ', messages)
+      //   console.log('messages: ', messages)
 
       const chatCompletion = await this.openAI.chat.completions.create({
         messages,
         model: 'gpt-3.5-turbo',
-        max_tokens: 100,
+        max_tokens: 400,
       })
 
       console.log(`Answer: ${JSON.stringify(chatCompletion)}`)
@@ -209,5 +218,48 @@ export class AIService {
     } else {
       console.log('Since there are no matches, GPT-3 will not be queried.')
     }
+  }
+
+  /**
+   * Utils
+   */
+  constructChatMessages = (
+    articles: { title: RecordMetadataValue; body: RecordMetadataValue }[],
+    userQuestion: string,
+  ): ChatCompletionMessageParam[] => {
+    const messages: ChatCompletionMessageParam[] = []
+
+    // Add the user's question first.
+    messages.push({ content: userQuestion, role: 'user' })
+
+    let currentTokenCount = this.estimateTokenCount(userQuestion)
+
+    for (const article of articles) {
+      const articleTokenCount = this.estimateTokenCount(
+        article.title + ' ' + article.body,
+      )
+
+      console.log(
+        'currentTokenCount, articleTokenCount',
+        currentTokenCount,
+        articleTokenCount,
+      )
+
+      // Check if adding the next article would exceed the token limit.
+      if (currentTokenCount + articleTokenCount > MAX_TOKEN_LIMIT) break
+
+      // Add article title and body to messages if it fits.
+      messages.push({
+        content: `${article.title} ${article.body}`,
+        role: 'system',
+      })
+      currentTokenCount += articleTokenCount
+    }
+
+    return messages
+  }
+
+  estimateTokenCount(text: string): number {
+    return text.split(/\s+/).length
   }
 }

@@ -400,7 +400,7 @@ export type Query = {
   feedbacks: Array<Feedback>
   myArticles: Array<Article>
   myFeedback?: Maybe<Feedback>
-  questionArticles: Scalars['String']['output']
+  questionAI: Scalars['String']['output']
   read: Read
   reads: Array<Read>
   relatedArticles: Array<ArticleWithScore>
@@ -472,7 +472,7 @@ export type QueryMyFeedbackArgs = {
   articleId: Scalars['Int']['input']
 }
 
-export type QueryQuestionArticlesArgs = {
+export type QueryQuestionAiArgs = {
   query: Scalars['String']['input']
 }
 
@@ -1029,6 +1029,12 @@ export type RelatedArticlesQuery = {
   }>
 }
 
+export type QuestionAiQueryVariables = Exact<{
+  query: Scalars['String']['input']
+}>
+
+export type QuestionAiQuery = { __typename?: 'Query'; questionAI: string }
+
 export const namedOperations = {
   Query: {
     articles: 'articles',
@@ -1043,6 +1049,7 @@ export const namedOperations = {
     admins: 'admins',
     reporters: 'reporters',
     relatedArticles: 'relatedArticles',
+    questionAI: 'questionAI',
   },
   Mutation: {
     CreateUser: 'CreateUser',
@@ -2301,3 +2308,48 @@ export const RelatedArticlesDocument = /*#__PURE__*/ {
   RelatedArticlesQuery,
   RelatedArticlesQueryVariables
 >
+export const QuestionAiDocument = /*#__PURE__*/ {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'questionAI' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'query' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'questionAI' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'query' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'query' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<QuestionAiQuery, QuestionAiQueryVariables>

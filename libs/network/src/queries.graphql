@@ -176,3 +176,7 @@ query relatedArticles {
     score
   }
 }
+
+query questionAI($query: String!) {
+  questionAI(query: $query)
+}

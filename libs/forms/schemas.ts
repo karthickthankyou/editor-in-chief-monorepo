@@ -6,3 +6,7 @@ export const formSchemaCreateArticle = z.object({
   published: z.boolean(),
   tags: z.array(z.string()),
 })
+
+export const formSchemaQuestionAI = z.object({
+  query: z.string(),
+})

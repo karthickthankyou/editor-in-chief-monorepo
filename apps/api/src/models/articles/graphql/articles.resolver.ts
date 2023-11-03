@@ -35,7 +35,7 @@ export class ArticlesResolver {
     return article
   }
 
-  @Query(() => String, { name: 'questionArticles' })
+  @Query(() => String, { name: 'questionAI' })
   question(@Args('query') query: string) {
     return this.ai.question(query)
   }

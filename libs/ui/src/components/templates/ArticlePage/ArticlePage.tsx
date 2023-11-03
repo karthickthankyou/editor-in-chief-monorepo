@@ -10,11 +10,11 @@ export interface IArticlePageProps {
 
 export const ArticlePage = ({ article }: IArticlePageProps) => {
   return (
-    <div className={fontMerriweatherSans300}>
+    <div className={cn(fontMerriweatherSans300, 'max-w-lg mx-auto')}>
       <h1 className={cn(fontMerriweather, 'text-xl')}>{article.title}</h1>
       <DisplayDate dateString={article.createdAt} />
 
-      <div className="max-w-lg mt-4 whitespace-pre">{article.body}</div>
+      <div className="mt-4 whitespace-pre-wrap ">{article.body}</div>
       <ReactionPanelAsync articleId={article.id} />
     </div>
   )

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { AIChat } from '@eic/ui/src/components/organisms/AIChat'
 import { Inter } from 'next/font/google'
 import { Toaster } from '@eic/ui/src/components/molecules/Toaster'
 
@@ -7,6 +8,7 @@ import '@eic/ui/src/index.css'
 import { AuthProvider } from '@/components/AuthProvider/AuthProvider'
 import { Container } from '@eic/ui/src/components/atoms/container'
 import { Navbar } from '@eic/ui/src/components/molecules/Navbar'
+import { Button } from '@eic/ui/src/components/atoms/button'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -28,6 +30,10 @@ export default function RootLayout({
             <div className="py-1" />
             {children}
             <Toaster />
+
+            <div className="fixed bottom-0 right-0 p-2">
+              <AIChat />
+            </div>
           </Container>
         </AuthProvider>
       </body>
