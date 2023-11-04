@@ -40,13 +40,15 @@ export class ArticlesResolver {
     return this.ai.question(query)
   }
 
-  @AllowAuthenticated()
+  //   @AllowAuthenticated()
   @Query(() => [Article], { name: 'articles' })
-  findAll(@Args() args: FindManyArticleArgs) {
-    return this.articlesService.findAll({
+  async findAll(@Args() args: FindManyArticleArgs) {
+    const articles = await this.articlesService.findAll({
       ...args,
       where: { ...args.where, published: { equals: true } },
     })
+    console.log('articles ', articles)
+    return articles
   }
 
   @AllowAuthenticated()

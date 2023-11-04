@@ -30,7 +30,7 @@ export class ReportersResolver {
     return this.reportersService.create(args)
   }
 
-  @AllowAuthenticated('admin')
+  //   @AllowAuthenticated('admin')
   @Query(() => [Reporter], { name: 'reporters' })
   findAll(@Args() args: FindManyReporterArgs) {
     return this.reportersService.findAll(args)

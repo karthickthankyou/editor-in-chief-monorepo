@@ -25,6 +25,11 @@ const config: CodegenConfig = {
       plugins,
       config: configDetails,
     },
+    '../../standalone-projects/mobile/gql/generated/index.tsx': {
+      documents: `../../standalone-projects/mobile/${documentsPattern}`,
+      plugins,
+      config: configDetails,
+    },
   },
 }
 

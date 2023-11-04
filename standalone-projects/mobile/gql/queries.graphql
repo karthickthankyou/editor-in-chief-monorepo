@@ -1,0 +1,30 @@
+query articles(
+  $skip: Int
+  $take: Int
+  $orderBy: [ArticleOrderByWithRelationInput!]
+  $where: ArticleWhereInput
+) {
+  articles(skip: $skip, take: $take, orderBy: $orderBy, where: $where) {
+    id
+    title
+    createdAt
+    tags
+  }
+}
+
+query article($where: ArticleWhereUniqueInput) {
+  article(where: $where) {
+    id
+    reporter {
+      user {
+        image
+        name
+        uid
+      }
+    }
+    body
+    createdAt
+    title
+    tags
+  }
+}

@@ -17,7 +17,7 @@ export const ArticleCard = ({
       <Link href={`/article/${article.id}`}>
         <div
           className={cn(
-            'text-lg font-medium hover:underline underline-offset-4 ',
+            'text-lg font-medium hover:underline line-clamp-2 max-w-lg underline-offset-4 ',
             fontMerriweather700,
           )}
         >
